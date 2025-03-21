@@ -1424,6 +1424,7 @@
 		    if (dict.null.includes(syl.final)) unshadow(corner); else shadow(corner);
 		});
 
+		let root = document.documentElement;
 		alphabet.querySelectorAll(".choice").forEach((c,i) => c.addEventListener("click", () => {
 		    document.getElementById(root.dataset.alphabet).classList.remove("chosen");
 		    c.classList.add("chosen");
