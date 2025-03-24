@@ -1,1444 +1,1162 @@
-<html data-alphabet="pin" data-character="simp">
-    <head>
-	<meta charset="utf8"/>
-	<style>
-	    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-
-	    html, body, div, span, header, section {
-		margin: 0;
-		padding: 0;
-		border: 0;
-		font-size: 100%;
-		font: inherit;
-		vertical-align: baseline;
-		line-height: 1;
-	    }
-    
-	    html {
-		font-size: 20px;
-
-		--black: #2c0006;
-		--grey: #989593;
-		--red: #B82132;
-		--white: #faf1ef;
-
-		--cell-height: 2.5em;
-		--cell-width: 4.5em;
-
-		color: var(--black);
-		background-color: var(--white);
-
-		&[data-alphabet="pin"] {
-		    .pinyin { display: inline; }
-		    .ipa { display: none; }
-		    .bopomofo { display: none; }
-		}
-		&[data-alphabet="ipa"] {
-		    .pinyin { display: none; }
-		    .ipa { display: inline; }
-		    .bopomofo { display: none; }
-		}
-		&[data-alphabet="bopo"] {
-		    .pinyin { display: none; }
-		    .ipa { display: none; }
-		    .bopomofo { display: inline; }
-		}
-
-		&[data-character="simp"] {
-		    font-family: "Noto Sans", "Noto Sans SC", "Noto Sans TC", sans-serif;
-		    .simplified { display: inline; }
-		    .traditional { display: none; }
-		}
-		&[data-character="trad"] {
-		    font-family: "Noto Sans", "Noto Sans TC", sans-serif;
-		    .simplified { display: none; }
-		    .traditional { display: inline; }
-		}
-	    }
-
-	    header {
-		position: relative;
-
-		margin: 1em 5em 1em 5em;
-		height: 3em;
-
-		display: grid;
-		place-items: center;
-	    }
-
-	    main {
-		margin-left: 5em;
-		margin-right: 5em;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-	    }
-
-	    section {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-	    }
-
-
-	    .table { display: grid; }
-	    .table > div, .head {
-		display: grid;
-		place-items: center;
-	    }
-	    .top, .left, .right, .head { font-weight: bold; }
-
-	    #specials {
-		display: grid;
-		grid-template-rows: var(--cell-height);
-		grid-template-columns: var(--cell-width) calc(5*var(--cell-width));
-
-		align-self: flex-start;
-
-		.body {
-		    grid-template-columns: repeat(3, var(--cell-width));
-		    grid-template-rows: var(--cell-height);
-		}
-	    }
-
-	    #initials {
-		display: grid;
-		grid-template-rows: var(--cell-height) calc(7*var(--cell-height));
-		grid-template-columns: var(--cell-width) calc(5*var(--cell-width));
-
-		.top {
-		    grid-template-rows: var(--cell-height);
-		    grid-template-columns: repeat(5, var(--cell-width));
-		}
-		.left {
-		    grid-template-rows: repeat(7, var(--cell-height));
-		    grid-template-columns: repeat(2, calc(var(--cell-width) / 2));
-		    * {
-			grid-column: span 2;
-		    }
-		    .side-group {
-			grid-column: span 1;
-			grid-row: span 2;
-			writing-mode: vertical-lr;
-		    }
-		    .side-subgroup {
-			grid-column: span 1;
-		    }
-		}
-		.body {
-		    grid-template-rows: repeat(7, var(--cell-height));
-		    grid-template-columns: repeat(5, var(--cell-width));
-		}
-	    }
-
-
-	    #finals {
-		display: grid;
-		grid-template-columns: var(--cell-width) calc(4*var(--cell-width)) var(--cell-width);
-		grid-template-rows: var(--cell-height) var(--cell-height) calc(11*var(--cell-height));
-
-		.side-head {
-		    grid-row: span 2;
-		}
-		.top {
-		    grid-template-columns: repeat(4, var(--cell-width));
-		    grid-template-rows: var(--cell-height);
-		}
-		.left {
-		    grid-template-columns: var(--cell-width);
-		    grid-template-rows: var(--cell-height) repeat(2, calc(5*var(--cell-height)));
-		}
-		.right {
-		    grid-template-columns: var(--cell-width);
-		    grid-template-rows: calc(2*var(--cell-height)) repeat(9, var(--cell-height));
-		}
-		.body {
-		    grid-template-columns: repeat(4, var(--cell-width));
-		    grid-template-rows: repeat(11, var(--cell-height));
-		}
-	    }
-
-	    #character-display {
-		height: 4em;
-
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		gap: 2em;
-	    
-		.tone {
-		    display: flex;
-		    flex-direction: column;
-		    align-items: center;
-		    justify-content: space-between;
-		}
-		.character {
-		    font-size: 2em;
-		}
-	    }
-
-	    .button {
-		position: absolute;
-		display: grid;
-		grid-template-rows: 3em;
-
-		div {
-		    display: grid;
-		    place-items: center;
-		}
-		.choice {
-		    z-index: 2;
-
-		    transition: .2s ease color;
-		    
-		    &.chosen {
-			color: var(--white);
-		    }
-		}
-		.knob {
-		    width: 3em;
-		    height: 3em;
-
-		    position: absolute;
-		    left: 0em;
-
-		    z-index: 1;
-		    background-color: var(--red);
-
-		    transition: .2s ease left;
-		}
-	    }
-	    #alphabet {
-		left: 0;
-		grid-template-columns: repeat(3, 3em);
-	    }
-	    #character {
-		right: 0;
-		grid-template-columns: repeat(2, 3em);
-	    }
-
-
-	    #search {
-		height: 2em;
-		width: calc(4 * 5em);
-
-		font-size: inherit;
-		text-indent: 1em;
-
-		color: inherit; 
-		background-color: inherit;
-		border: 2px solid var(--red);
-		&:focus {
-		    outline: none;
-		    border: 3px solid var(--red);
-		}
-	    }
-	</style>
-    </head>
-    <body>
-	<header>
-	    <div id="alphabet" class="button">
-		<div id="pin" class="choice chosen">拼</div>
-		<div id="ipa" class="choice">音</div>
-		<div id="bopo" class="choice">住</div>
-		<div class="knob"></div>
-	    </div>
-	    <input id="search" type="text" placeholder="search..."/>
-	    <div id="character" class="button">
-		<div id="simp" class="choice chosen" style="font-family: 'Noto Sans SC'">简</div>
-		<div id="trad" class="choice" style="font-family: 'Noto Sans TC'">繁</div>
-		<div class="knob"></div>
-	    </div>
-	</header>
-	<main>
-	    <section>
-		<div id="initials">
-		    <div class="table">
-			<div>Ø</div>
-		    </div>
-		    <div class="table top">
-			<div><span class="simplified">唇</span><span class="traditional">唇</span></div>
-			<div><span class="simplified">龈</span><span class="traditional">齦</span></div>
-			<div><span class="simplified">卷舌</span><span class="traditional">卷舌</span></div>
-			<div><span class="simplified">龈腭</span><span class="traditional">齦齶</span></div>
-			<div><span class="simplified">软腭</span><span class="traditional">輭齶</span></div>
-		    </div>
-		    <div class="table left">
-			<div>鼻</div>
-			<div class="side-group"><span class="simplified">塞</span><span class="traditional">塞</span></div>
-			<div class="side-subgroup"><span class="simplified">气</span><span class="traditional">氣</span></div>
-			<div class="side-subgroup"><span class="simplified">不</span><span class="traditional">不</span></div>
-			<div class=side-group><span class="simplified">塞擦</span><span class="traditional">塞擦</span></div>
-			<div class="side-subgroup"><span class="simplified">气</span><span class="traditional">氣</span></div>
-			<div class="side-subgroup"><span class="simplified">不</span><span class="traditional">不</span></div>
-			<div><span class="simplified">擦</span><span class="traditional">擦</span></div>
-			<div><span class="simplified">边</span><span class="traditional">邊</span></div>
-		    </div>
-		    <div class="table body">
-			<div><span class="pinyin">m</span><span class="ipa">[m]</span><span class="bopomofo">ㄇ</span></div>
-			<div><span class="pinyin">n</span><span class="ipa">[n]</span><span class="bopomofo">ㄋ</span></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div><span class="pinyin">p</span><span class="ipa">[pʰ]</span><span class="bopomofo">ㄆ</span></div>
-			<div><span class="pinyin">t</span><span class="ipa">[tʰ]</span><span class="bopomofo">ㄊ</span></div>
-			<div></div>
-			<div></div>
-			<div><span class="pinyin">k</span><span class="ipa">[kʰ]</span><span class="bopomofo">ㄎ</span></div>
-			<div><span class="pinyin">b</span><span class="ipa">[p]</span><span class="bopomofo">ㄅ</span></div>
-			<div><span class="pinyin">d</span><span class="ipa">[t]</span><span class="bopomofo">ㄉ</span></div>
-			<div></div>
-			<div></div>
-			<div><span class="pinyin">g</span><span class="ipa">[k]</span><span class="bopomofo">ㄍ</span></div>
-			<div></div>
-			<div><span class="pinyin">c</span><span class="ipa">[tsʰ]</span><span class="bopomofo">ㄘ</span></div>
-			<div><span class="pinyin">ch</span><span class="ipa">[tʂʰ]</span><span class="bopomofo">ㄔ</span></div>
-			<div><span class="pinyin">q</span><span class="ipa">[tɕʰ]</span><span class="bopomofo">ㄑ</span></div>
-			<div></div>
-			<div></div>
-			<div><span class="pinyin">z</span><span class="ipa">[ts]</span><span class="bopomofo">ㄗ</span></div>
-			<div><span class="pinyin">zh</span><span class="ipa">[tʂ]</span><span class="bopomofo">ㄓ</span></div>
-			<div><span class="pinyin">j</span><span class="ipa">[tɕ]</span><span class="bopomofo">ㄐ</span></div>
-			<div></div>
-			<div><span class="pinyin">f</span><span class="ipa">[f]</span><span class="bopomofo">ㄈ</span></div>
-			<div><span class="pinyin">s</span><span class="ipa">[s]</span><span class="bopomofo">ㄙ</span></div>
-			<div><span class="pinyin">sh</span><span class="ipa">[ʂ]</span><span class="bopomofo">ㄕ</span></div>
-			<div><span class="pinyin">x</span><span class="ipa">[ɕ]</span><span class="bopomofo">ㄒ</span></div>
-			<div><span class="pinyin">h</span><span class="ipa">[x]</span><span class="bopomofo">ㄏ</span></div>
-			<div></div>
-			<div><span class="pinyin">l</span><span class="ipa">[l]</span><span class="bopomofo">ㄌ</span></div>
-			<div><span class="pinyin">r</span><span class="ipa">[ʐ]</span><span class="bopomofo">ㄖ</span></div>
-			<div></div>
-			<div></div>
-		    </div>
-		</div>
-		<div id="specials">
-		    <div class="table left">
-			<div><span class="simplified">儿</span><span class="traditional">兒</span></div>
-		    </div>
-		    <div class="table body">
-			<div id="er"><span class="pinyin">er</span><span class="ipa">[ɚ]</span><span class="bopomofo">ㄦ</span></div>
-		    </div>
-		</div>
-		<div id="character-display"></div>
-	    </section>
-	    <div id="finals">
-		<div class="side-head head"><span class="simplified">核</span><span class="traditional">核</span></div>
-		<div class="head"><span class="simplified">中间</span><span class="traditional">中間</span></div>
-		<div class="side-head head"><span class="simplified">尾</span><span class="traditional">尾</span></div>
-		<div class="table top">
-		    <div>Ø</div>
-		    <div>[w]</div>
-		    <div>[j]</div>
-		    <div>[ɥ]</div>
-		</div>
-		<div class="table left">
-		    <div><span class="simplified">高</span><span class="traditional">高</span></div>
-		    <div class="left-group"><span class="simplified">中</span><span class="traditional">中</span></div>
-		    <div class="left-group"><span class="simplified">低</span><span class="traditional">低</span></div>
-		</div>
-		<div class="table body">
-		    <div><span class="pinyin">i</span><span class="ipa">[ɨ]</span><span class="bopomofo">ㄭ</span></div>
-		    <div><span class="pinyin">u</span><span class="ipa">[u]</span><span class="bopomofo">ㄨ</span></div>
-		    <div><span class="pinyin">i</span><span class="ipa">[i]</span><span class="bopomofo">ㄧ</span></div>
-		    <div><span class="pinyin">ü</span><span class="ipa">[y]</span><span class="bopomofo">ㄩ</span></div>
-		    <div><span class="pinyin">e</span><span class="ipa">[ɤ]</span><span class="bopomofo">ㄜ</span></div>
-		    <div><span class="pinyin">uo</span><span class="ipa">[wo]</span><span class="bopomofo">ㄨㄛ</span></div>
-		    <div><span class="pinyin">ie</span><span class="ipa">[je]</span><span class="bopomofo">ㄧㄝ</span></div>
-		    <div><span class="pinyin">üe</span><span class="ipa">[ɥe]</span><span class="bopomofo">ㄩㄝ</span></div>
-		    <div><span class="pinyin">ou</span><span class="ipa">[ou̯]</span><span class="bopomofo">ㄡ</span></div>
-		    <div></div>
-		    <div><span class="pinyin">iu</span><span class="ipa">[jou̯]</span><span class="bopomofo">ㄧㄡ</span></div>
-		    <div></div>
-		    <div><span class="pinyin">ei</span><span class="ipa">[ei̯]</span><span class="bopomofo">ㄟ</span></div>
-		    <div><span class="pinyin">ui</span><span class="ipa">[wei̯]</span><span class="bopomofo">ㄨㄟ</span></div>
-		    <div></div>
-		    <div></div>
-		    <div><span class="pinyin">en</span><span class="ipa">[ən]</span><span class="bopomofo">ㄣ</span></div>
-		    <div><span class="pinyin">un</span><span class="ipa">[wən]</span><span class="bopomofo">ㄨㄣ</span></div>
-		    <div><span class="pinyin">in</span><span class="ipa">[in]</span><span class="bopomofo">ㄧㄣ</span></div>
-		    <div><span class="pinyin">ün</span><span class="ipa">[yn]</span><span class="bopomofo">ㄩㄣ</span></div>
-		    <div><span class="pinyin">eng</span><span class="ipa">[əŋ]</span><span class="bopomofo">ㄥ</span></div>
-		    <div><span class="pinyin">ong</span><span class="ipa">[ʊŋ]</span><span class="bopomofo">ㄨㄥ</span></div>
-		    <div><span class="pinyin">ing</span><span class="ipa">[iŋ]</span><span class="bopomofo">ㄧㄥ</span></div>
-		    <div><span class="pinyin">iong</span><span class="ipa">[jʊŋ]</span><span class="bopomofo">ㄩㄥ</span></div>
-		    <div><span class="pinyin">a</span><span class="ipa">[a]</span><span class="bopomofo">ㄚ</span></div>
-		    <div><span class="pinyin">ua</span><span class="ipa">[wa]</span><span class="bopomofo">ㄨㄚ</span></div>
-		    <div><span class="pinyin">ia</span><span class="ipa">[ja]</span><span class="bopomofo">ㄧㄚ</span></div>
-		    <div></div>
-		    <div><span class="pinyin">ao</span><span class="ipa">[au̯]</span><span class="bopomofo">ㄠ</span></div>
-		    <div></div>
-		    <div><span class="pinyin">iao</span><span class="ipa">[jau̯]</span><span class="bopomofo">ㄧㄠ</span></div>
-		    <div></div>
-		    <div><span class="pinyin">ai</span><span class="ipa">[ai̯]</span><span class="bopomofo">ㄞ</span></div>
-		    <div><span class="pinyin">uai</span><span class="ipa">[wai̯]</span><span class="bopomofo">ㄨㄞ</span></div>
-		    <div></div>
-		    <div></div>
-		    <div><span class="pinyin">an</span><span class="ipa">[an]</span><span class="bopomofo">ㄢ</span></div>
-		    <div><span class="pinyin">uan</span><span class="ipa">[wan]</span><span class="bopomofo">ㄨㄢ</span></div>
-		    <div><span class="pinyin">ian</span><span class="ipa">[jɛn]</span><span class="bopomofo">ㄧㄢ</span></div>
-		    <div><span class="pinyin">üan</span><span class="ipa">[ɥɛn]</span><span class="bopomofo">ㄩㄢ</span></div>
-		    <div><span class="pinyin">ang</span><span class="ipa">[aŋ]</span><span class="bopomofo">ㄤ</span></div>
-		    <div><span class="pinyin">uang</span><span class="ipa">[waŋ]</span><span class="bopomofo">ㄨㄤ</span></div>
-		    <div><span class="pinyin">iang</span><span class="ipa">[jaŋ]</span><span class="bopomofo">ㄧㄤ</span></div>
-		    <div></div>
-		</div>
-		<div class="table right">
-		    <div>Ø</div>
-		    <div>[u]</div>
-		    <div>[i]</div>
-		    <div>[n]</div>
-		    <div>[ŋ]</div>
-		    <div>Ø</div>
-		    <div>[u]</div>
-		    <div>[i]</div>
-		    <div>[n]</div>
-		    <div>[ŋ]</div>
-		</div>
-	    </div>
-	    <script defer>
-		let dict = [
-		    // {initial: -2, final: -3, pinyin: "ê", simps: ["","","","",""], trads: ["","","","",""]},
-		    // {initial: -2, final: -2, pinyin: "o", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -2, final: -1, pinyin: "er", simps: ["","儿","耳","二",""], trads: ["","兒","耳","二",""]},
-		    {initial: -1, final: 1, pinyin: "wu", simps: ["屋","无","五","物",""], trads: ["屋","無","五","物",""]},
-		    {initial: -1, final: 2, pinyin: "yi", simps: ["一","","以","义",""], trads: ["一","","以","義",""]},
-		    {initial: -1, final: 3, pinyin: "yu", simps: ["","鱼","雨","",""], trads: ["","魚","雨","",""]},
-		    {initial: -1, final: 4, pinyin: "eoe", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 5, pinyin: "wo", simps: ["","","我","",""], trads: ["","","我","",""]},
-		    {initial: -1, final: 6, pinyin: "ye", simps: ["","","","叶",""], trads: ["","","","葉",""]},
-		    {initial: -1, final: 7, pinyin: "yue", simps: ["","","","月",""], trads: ["","","","月",""]},
-		    {initial: -1, final: 8, pinyin: "ou", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 10, pinyin: "you", simps: ["","","有","",""], trads: ["","","有","",""]},
-		    {initial: -1, final: 12, pinyin: "ei", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 13, pinyin: "wei", simps: ["","为","","",""], trads: ["","為","","",""]},
-		    {initial: -1, final: 16, pinyin: "en", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 17, pinyin: "wen", simps: ["","文","","问",""], trads: ["","文","","問",""]},
-		    {initial: -1, final: 18, pinyin: "yin", simps: ["阴","","","",""], trads: ["陰","","","",""]},
-		    // {initial: -1, final: 19, pinyin: "yun", simps: ["","","","",""], trads: ["","","","",""]},
-		    // {initial: -1, final: 20, pinyin: "eng", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 21, pinyin: "weng", simps: ["翁","","","",""], trads: ["翁","","","",""]},
-		    // {initial: -1, final: 22, pinyin: "ying", simps: ["","","","",""], trads: ["","","","",""]},
-		    // {initial: -1, final: 23, pinyin: "yong", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 24, pinyin: "a", simps: ["","","","","啊"], trads: ["","","","","啊"]},
-		    {initial: -1, final: 25, pinyin: "wa", simps: ["蛙","娃","","",""], trads: ["蛙","娃","","",""]},
-		    {initial: -1, final: 26, pinyin: "ya", simps: ["","牙","","",""], trads: ["","牙","","",""]},
-		    {initial: -1, final: 28, pinyin: "ao", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 30, pinyin: "yao", simps: ["要","","","",""], trads: ["要","","","",""]},
-		    {initial: -1, final: 32, pinyin: "ai", simps: ["","","","爱",""], trads: ["","","","愛",""]},
-		    {initial: -1, final: 33, pinyin: "wai", simps: ["","","","外",""], trads: ["","","","外",""]},
-		    {initial: -1, final: 36, pinyin: "an", simps: ["安","","","",""], trads: ["安","","","",""]},
-		    {initial: -1, final: 37, pinyin: "wan", simps: ["","","","万",""], trads: ["","","","萬",""]},
-		    {initial: -1, final: 38, pinyin: "yan", simps: ["","言","眼","",""], trads: ["","言","眼","",""]},
-		    {initial: -1, final: 39, pinyin: "yuan", simps: ["","元","","",""], trads: ["","元","","",""]},
-		    {initial: -1, final: 40, pinyin: "ang", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: -1, final: 41, pinyin: "wang", simps: ["","王","网","",""], trads: ["","王","網","",""]},
-		    {initial: -1, final: 42, pinyin: "yang", simps: ["","阳","","",""], trads: ["","陽","","",""]},
-		    {initial: 0, final: 1, pinyin: "mu", simps: ["","","母","木",""], trads: ["","","母","木",""]},
-		    {initial: 0, final: 2, pinyin: "mi", simps: ["","","米","",""], trads: ["","","米","",""]},
-		    {initial: 0, final: 4, pinyin: "me", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 0, final: 5, pinyin: "mo", simps: ["","","",""], trads: ["","","","",""]},
-		    {initial: 0, final: 6, pinyin: "mie", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 0, final: 8, pinyin: "mou", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 0, final: 10, pinyin: "miu", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 0, final: 12, pinyin: "mei", simps: ["","","每","",""], trads: ["","","每","",""]},
-		    {initial: 0, final: 16, pinyin: "men", simps: ["","","","","们"], trads: ["","","","","們"]},
-		    {initial: 0, final: 18, pinyin: "min", simps: ["","民","","",""], trads: ["","民","","",""]},
-		    {initial: 0, final: 20, pinyin: "meng", simps: ["","","","梦",""], trads: ["","","","夢",""]},
-		    {initial: 0, final: 22, pinyin: "ming", simps: ["","明","","命",""], trads: ["","明","","命",""]},
-		    {initial: 0, final: 24, pinyin: "ma", simps: ["妈","麻","马", "骂", "吗"], trads: ["媽","麻","馬","罵","嗎"]},
-		    {initial: 0, final: 28, pinyin: "mao", simps: ["猫","毛","","",""], trads: ["貓","毛","","",""]},
-		    {initial: 0, final: 30, pinyin: "miao", simps: ["","","秒","妙",""], trads: ["","","秒","妙",""]},
-		    {initial: 0, final: 32, pinyin: "mai", simps: ["","","买","卖",""], trads: ["","","買","賣",""]},
-		    {initial: 0, final: 36, pinyin: "man", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 0, final: 38, pinyin: "mian", simps: ["","眠","免","面",""], trads: ["","眠","免","麵",""]},
-		    {initial: 0, final: 40, pinyin: "mang", simps: ["","忙","","",""], trads: ["","忙","","",""]},
-		    {initial: 1, final: 1, pinyin: "nu", simps: ["","","","怒",""], trads: ["","","","怒",""]},
-		    {initial: 1, final: 2, pinyin: "ni", simps: ["","","你","",""], trads: ["","","你","",""]},
-		    {initial: 1, final: 3, pinyin: "nü", simps: ["","","女","",""], trads: ["","","女","",""]},
-		    {initial: 1, final: 4, pinyin: "ne", simps: ["","","","","呢"], trads: ["","","","","呢"]},
-		    {initial: 1, final: 5, pinyin: "nuo", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 1, final: 6, pinyin: "nie", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 1, final: 7, pinyin: "nüe", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 1, final: 8, pinyin: "nou", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 1, final: 10, pinyin: "niu", simps: ["","牛","","",""], trads: ["","牛","","",""]},
-		    {initial: 1, final: 12, pinyin: "nei", simps: ["","","","内",""], trads: ["","","","內",""]},
-		    {initial: 1, final: 16, pinyin: "nen", simps: ["","","","嫩",""], trads: ["","","","嫩",""]}, // only one unusual character
-		    {initial: 1, final: 17, pinyin: "nun", simps: ["","黁","","",""], trads: ["","","","",""]}, // only one unusual character
-		    {initial: 1, final: 18, pinyin: "nin", simps: ["","您","","",""], trads: ["","您","","",""]},
-		    {initial: 1, final: 20, pinyin: "neng", simps: ["","能","","",""], trads: ["","能","","",""]}, // only one character
-		    {initial: 1, final: 21, pinyin: "nong", simps: ["","农","","",""], trads: ["","農","","",""]},
-		    {initial: 1, final: 22, pinyin: "ning", simps: ["","宁","","",""], trads: ["","寧","","",""]},
-		    {initial: 1, final: 24, pinyin: "na", simps: ["","","哪","那",""], trads: ["","","哪","那",""]},
-		    {initial: 1, final: 28, pinyin: "nao", simps: ["","","脑","",""], trads: ["","","腦","",""]},
-		    {initial: 1, final: 30, pinyin: "niao", simps: ["","","鸟","尿",""], trads: ["","","鳥","尿",""]},
-		    {initial: 1, final: 32, pinyin: "nai", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 1, final: 36, pinyin: "nan", simps: ["","南","","",""], trads: ["","南","","",""]},
-		    {initial: 1, final: 37, pinyin: "nuan", simps: ["","","暖","",""], trads: ["","","暖","",""]},
-		    {initial: 1, final: 38, pinyin: "nian", simps: ["","年","","念",""], trads: ["","年","","念",""]},
-		    {initial: 1, final: 40, pinyin: "nang", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 1, final: 42, pinyin: "niang", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 1, pinyin: "pu", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 2, pinyin: "pi", simps: ["","皮","","",""], trads: ["","皮","","",""]},
-		    {initial: 5, final: 5, pinyin: "po", simps: ["","婆","","破",""], trads: ["","婆","","破",""]},
-		    {initial: 5, final: 6, pinyin: "pei", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 8, pinyin: "pen", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 12, pinyin: "pin", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 16, pinyin: "peng", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 5, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 6, final: 1, pinyin: "tu", simps: ["","图","土","兔",""], trads: ["","圖","土","兔",""]},
-		    {initial: 6, final: 2, pinyin: "ti", simps: ["","题","体","",""], trads: ["","題","體","",""]},
-		    {initial: 6, final: 4, pinyin: "te", simps: ["","","","特",""], trads: ["","","","特",""]},
-		    {initial: 6, final: 5, pinyin: "tuo", simps: ["脱","","","",""], trads: ["脫","","","",""]},
-		    {initial: 6, final: 6, pinyin: "tie", simps: ["贴","","铁","",""], trads: ["貼","","鋨","",""]},
-		    {initial: 6, final: 8, pinyin: "tou", simps: ["","头","","",""], trads: ["","頭","","",""]},
-		    {initial: 6, final: 13, pinyin: "tui", simps: ["推","","","退",""], trads: ["推","","","退",""]},
-		    {initial: 6, final: 17, pinyin: "tun", simps: ["","豚","","",""], trads: ["","豚","","",""]},
-		    {initial: 6, final: 20, pinyin: "teng", simps: ["","疼","","",""], trads: ["","疼","","",""]},
-		    {initial: 6, final: 21, pinyin: "tong", simps: ["同","童","","痛",""], trads: ["同","童","","痛",""]},
-		    {initial: 6, final: 22, pinyin: "ting", simps: ["听","停","","",""], trads: ["聽","停","","",""]},
-		    {initial: 6, final: 24, pinyin: "ta", simps: ["他","","塔","踏",""], trads: ["他","","塔","踏",""]},
-		    {initial: 6, final: 28, pinyin: "tao", simps: ["","逃","","",""], trads: ["","逃","","",""]},
-		    {initial: 6, final: 30, pinyin: "tiao", simps: ["","","","跳",""], trads: ["","","","跳",""]},
-		    {initial: 6, final: 32, pinyin: "tai", simps: ["台","","","太",""], trads: ["台","","","太",""]},
-		    {initial: 6, final: 36, pinyin: "tan", simps: ["","谈","毯","",""], trads: ["","談","毯","",""]},
-		    {initial: 6, final: 37, pinyin: "tuan", simps: ["圕","","","",""], trads: ["圕","","","",""]},
-		    {initial: 6, final: 38, pinyin: "tian", simps: ["天","田","","",""], trads: ["天","田","","",""]},
-		    {initial: 6, final: 40, pinyin: "tang", simps: ["汤","糖","","",""], trads: ["湯","糖","","",""]},
-		    {initial: 9, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 9, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 10, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 10, pinyin: "diu", simps: ["丢","","","",""], trads: ["丟","","","",""]}, // only one unusual character
-		    {initial: 11, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 11, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 8, pinyin: "guo", simps: ["","国","","",""], trads: ["","國","","",""]},
-		    {initial: 14, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 14, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 16, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 21, pinyin: "chong", simps: ["","虫","","",""], trads: ["","蟲","","",""]},
-		    {initial: 17, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 17, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 12, pinyin: "zei", simps: ["","贼","","",""], trads: ["","賊","","",""]},
-		    {initial: 18, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 19, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 23, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 26, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 39, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 18, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 21, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 21, pinyin: "zhong", simps: ["中","","种","重",""], trads: ["中","","種","重",""]},
-		    {initial: 22, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 22, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 19, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 23, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 26, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 39, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 23, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 25, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 26, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 12, pinyin: "shei", simps: ["","谁","","",""], trads: ["","誰","","",""]},
-		    {initial: 27, final: 13, pinyin: "shui", simps: ["","谁","水","睡",""], trads: ["","誰","水","睡",""]},
-		    {initial: 27, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 27, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 19, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 23, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 26, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 39, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 28, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 29, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 31, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
-		    {initial: 32, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]}
-		];
-
-		dict.finals = Array.from(Array(7*5), (_,i) => dict.reduce((acc,syl) => syl.initial == i ? acc.concat(syl.final) : acc, []));
-		dict.null = dict.reduce((acc, syl) => syl.initial == -1 ? acc.concat(syl.final) : acc, []);
-		dict.initials = Array.from(Array(11*4), (_,f) => dict.reduce((acc,syl) => syl.final == f && syl.initial != -1 ? acc.concat(syl.initial) : acc, []));
-
-		// dei, tei
-		// o, ê, yo, lo
-		// hng, hm, m, ng
-
-		let search = document.getElementById("search");
-		let alphabet = document.querySelector("#alphabet");
-		let character = document.querySelector("#character");
-
-		let foot = document.querySelector("#specials .left>div");
-		let specials = document.querySelector("#specials .body").children;
-
-		specials.nrow = 1;
-		specials.ncol = 1;
-		specials.locked = null;
-		specials.at = function (i,j) {if (i<0) i+=this.nrow; if (j<0) j+=this.ncol; return this[i*this.ncol+j];}
-
-		let corner = document.querySelector("#initials>div>div");
-		let heads = document.querySelector("#initials .top").children;
-		let sides = document.querySelector("#initials .left").children;
-		let initials = document.querySelector("#initials .body").children;
-
-		initials.nrow = 7;
-		initials.ncol = 5;
-		initials.locked = null;
-		initials.at = function (i,j) {if (i<0) i+=this.nrow; if (j<0) j+=this.ncol; return this[i*this.ncol+j];}
-
-		let [leftHead, topHead, rightHead] = document.querySelectorAll(".head");
-		let tops = document.querySelector("#finals .top").children;
-		let lefts = document.querySelector("#finals .left").children;
-		let rights = document.querySelector("#finals .right").children;
-		let finals = document.querySelector("#finals .body").children;
-
-		finals.nrow = 11;
-		finals.ncol = 4;
-		finals.locked = null;
-		finals.at = function (i,j) {if (i<0) i+=this.nrow; if (j<0) j+=this.ncol; return this[i*this.ncol+j];}
-
-		let display = document.getElementById("character-display");
-		let borderWidth = "2px";
-		let border = borderWidth + " solid var(--red)";
-
-
-		function highlight(header) {header.style.color = "var(--white)"; header.style.backgroundColor = "var(--red)"; header.style.border = border;}
-		function unhighlight(header) {header.style.color = ""; header.style.backgroundColor = ""; header.style.border = "";}
-
-		function shadow(cell) {cell.style.color = "var(--grey)"; cell.style.fontWeight = "300";}
-		function unshadow(cell) {cell.style.color = ""; cell.style.fontWeight = "";}
-
-		function shadowAll(cells) {for (let c=0; c<cells.length; c++) shadow(cells[c]);}
-		function unshadowAll(cells) {for (let c=0; c<cells.length; c++) unshadow(cells[c]);}
-
-		function unlock(table) {
-		    if (!table.locked) return;
-		    table.locked.locked = false;
-		    table.locked.style.border = "";
-		    // table.locked.style.backgroundColor = ""
-		    // table.locked.style.color = ""
-		    // table.locked.style.outline = "";
-		    table.locked = null;
-		}
-		function lock(table, cell) {
-		    unlock(table);
-		    table.locked = cell;
-		    cell.locked = true;
-		    cell.style.border = "2px solid var(--red)";
-		    // table.locked.style.backgroundColor = "var(--red)";
-		    // table.locked.style.color = "var(--white)";
-		    // cell.style.outline = "2px solid var(--red)";
-		}
-
-		function reset() {
-		    unlock(initials);
-		    unlock(finals);
-		    unlock(specials);
-		    display.innerHTML = "";
-		    unshadow(corner);
-		    unshadowAll(initials);
-		    unshadowAll(finals);
-		    unshadowAll(specials);
-		}
-
-		function surround(cell) {if (cell.locked) return; cell.style.border = border;}
-		function unsurround(cell) {if (cell.locked) return; cell.style.border = "";}
-
-		function surroundRow(cells, i) {
-		    for (let j=0; j<cells.ncol; j++) {
-			let cell = cells.at(i,j);
-			if (cell.locked) continue;
-			cell.style.borderTop = border;
-			cell.style.borderBottom = border;
-		    }
-		    let leftCell = cells.at(i, 0);
-		    if (!leftCell.locked) {
-			leftCell.style.borderLeft = border;
-			leftCell.style.paddingRight = borderWidth;
-		    }
-		    let rightCell = cells.at(i, -1);
-		    if (!rightCell.locked) {
-			rightCell.style.borderRight = border;
-			rightCell.style.paddingLeft = borderWidth;
-		    }
-		}
-		function unsurroundRow(cells, i) {
-		    for (let j=0; j<cells.ncol; j++) {
-			let cell = cells.at(i,j);
-			if (cell.locked) continue;
-			cell.style.border = "";
-		    }
-		    let leftCell = cells.at(i,0);
-		    if (!leftCell.locked) leftCell.style.paddingRight = "";
-		    let rightCell = cells.at(i,-1); 
-		    if (!rightCell.locked) rightCell.style.paddingLeft = "";
-		}
-		function surroundCol(cells, j) {
-		    for (let i=0; i<cells.nrow; i++) {
-			let cell = cells.at(i,j);
-			if (cell.locked) continue;
-			cell.style.borderLeft = border;
-			cell.style.borderRight = border;
-		    }
-		    let topCell = cells.at(0,j);
-		    if (!topCell.locked) {
-			topCell.style.borderTop = border;
-			topCell.style.paddingBottom = borderWidth;
-		    }
-		    let botCell = cells.at(-1,j);
-		    if (!botCell.locked) {
-			botCell.style.borderBottom = border;
-			botCell.style.paddingTop = borderWidth;
-		    }
-		}
-		function unsurroundCol(cells, j) {
-		    for (let i=0; i<cells.nrow; i++) {
-			let cell = cells.at(i,j);
-			if (!cell.locked) cell.style.border = "";
-		    }
-		    let topCell = cells.at(0,j);
-		    if (!topCell.locked) topCell.style.paddingBottom = "";
-		    let botCell = cells.at(-1,j);
-		    if (!botCell.locked) botCell.style.paddingTop = "";
-		}
-		function surroundRows(cells, i, ni) {
-		    for (let j=0; j<cells.ncol; j++) {
-			let topCell = cells.at(i,j);
-			if (!topCell.locked) {
-			    topCell.style.borderTop = border;
-			    topCell.style.paddingBottom = borderWidth;
-			}
-			let botCell = cells.at(i+ni-1,j);
-			if (!botCell.locked) {
-			    botCell.style.borderBottom = border;
-			    botCell.style.paddingTop = borderWidth;
-			}
-		    }
-		    for (let ii=0; ii<ni; ii++) {
-			let leftCell = cells.at(i+ii,0);
-			if (!leftCell.locked) {
-			    leftCell.style.borderLeft = border;
-			    leftCell.style.paddingRight = borderWidth;
-			}
-			let rightCell = cells.at(i+ii,-1)
-			if (!rightCell.locked) {
-			    rightCell.style.borderRight = border;
-			    rightCell.style.paddingLeft = borderWidth;
-			}
-		    }
-		}
-		function unsurroundRows(cells, i, ni) {
-		    for (let j=0; j<cells.ncol; j++) {
-			let topCell = cells.at(i,j);
-			if (!topCell.locked) {
-			    topCell.style.border = "";
-			    topCell.style.padding = "";
-			}
-			let botCell = cells.at(i+ni-1,j);
-			if (!botCell.locked) {
-			    botCell.style.border = "";
-			    botCell.style.padding = "";
-			}
-		    }
-		    for (let ii=1; ii<ni-1; ii++) {
-			let leftCell = cells.at(i+ii,0);
-			if (!leftCell.locked) {
-			    leftCell.style.border = "";
-			    leftCell.style.padding = "";
-			}
-			let rightCell = cells.at(i+ii,-1);
-			if (!rightCell.locked) {
-			    rightCell.style.border = "";
-			    rightCell.style.padding = "";
-			}
-		    }
-		}
-
-
-		function show(syl) {
-		    let res = "";
-		    for (let t=0; t<5; t++) {
-			let sc = syl.simps[t];
-			let tc = syl.trads[t];
-			if (!sc) continue;
-			let tone = document.createElement("DIV");
-			let char = document.createElement("SPAN");
-			let trad = document.createElement("SPAN");
-			let pinyin = document.createElement("SPAN");
-
-			tone.className = "tone";
-			char.className = "character simplified";
-			trad.className = "character traditional";
-			// pinyin.className = "pinyin";
-
-			char.innerText = sc;
-			trad.innerText = tc;
-
-			let d = ['\u0304', '\u0301', '\u030C', '\u0300', ''][t];
-			pinyin.innerText = syl.pinyin.replace(/(ch|zh|sh|[mpbfntdczslrqjxkghwy])?(i|u)?([aeiou])(.*)/, (_, i, m, n, c) => (i||"") + (m||"") + n + d + c);
-
-			tone.appendChild(char);
-			tone.appendChild(trad);
-			tone.appendChild(pinyin);
-			res += tone.outerHTML;
-		    }
-		    return res;
-		}
-
-		foot.addEventListener("mouseover", () => {
-		    surroundRow(specials, 0);
-		    highlight(foot);
-		});
-		foot.addEventListener("mouseleave", () => {
-		    unsurroundRow(specials, 0);
-		    unhighlight(foot);
-		});
-		for (let s=0; s<specials.length; s++) {
-		    let cell = specials[s];
-
-		    cell.addEventListener("mouseover", () => {
-			surround(cell);
-			highlight(foot);
-		    });
-		    cell.addEventListener("mouseleave", () => {
-			unsurround(cell);
-			unhighlight(foot);
-		    });
-		    cell.addEventListener("click", () => {
-			search.value = "";
-			if (cell.locked) {
-			    reset();
-			    return;
-			}
-
-			lock(specials, cell);
-			lock(initials, corner);
-			unlock(finals);
-
-			unshadow(corner);
-			shadowAll(initials);
-			shadowAll(finals);
-			unshadowAll(specials);
-
-			display.innerHTML = show(dict.find(syl => syl.final == -s-1));
-		    });
-		}
-
-
-		let group = null;
-		for (let i=0, is=0; i<initials.nrow; i++, is++) {
-		    let side = sides[is];
-
-		    if (side.className == "side-group") {group = side; side = sides[++is];}
-		    if (group && side.className != "side-subgroup") group = null;
-		    let sidegroup = group;
-
-		    for (let j=0; j<initials.ncol; j++) {
-			let l = i*initials.ncol + j;
-
-			let cell = initials[l];
-			if (!cell.innerHTML) continue;
-			let head = heads[j];
-
-
-			cell.addEventListener("mouseover", () => {
-			    surround(cell);
-			    highlight(head);
-			    sidegroup && highlight(sidegroup);
-			    highlight(side);
-			});
-			cell.addEventListener("mouseleave", () => {
-			    unsurround(cell);
-			    unhighlight(head);
-			    sidegroup && unhighlight(sidegroup);
-			    unhighlight(side);
-			});
-
-
-			cell.addEventListener("click", () => {
-			    search.value = "";
-			    if (cell.locked) {
-				reset();
-				return;
-			    }
-			    
-			    unlock(specials);
-			    shadowAll(specials);
-
-			    let syl = undefined;
-			    if (finals.locked) {
-				syl = dict.find(s => {
-				    if (s.initial != l) return false;
-				    return finals[s.final].locked;
-				});
-			    }
-			    if (syl) display.innerHTML = show(syl);
-			    else {
-				unlock(finals);
-				display.innerHTML = "";
-
-				unshadow(corner);
-				unshadowAll(initials);
-			    }
-			    lock(initials, cell);
-			    shadowAll(finals);
-			    dict.finals[l].forEach(ff => unshadow(finals[ff]));
-			});
-		    }
-		}
-
-		corner.addEventListener("mouseover", () => surround(corner));
-		corner.addEventListener("mouseleave", () => unsurround(corner));
-		corner.addEventListener("click", () => {
-		    search.value = "";
-		    if (corner.locked) {
-			reset();
-			return;
-		    }
-
-		    unshadowAll(specials);
-
-		    let syl = undefined;
-		    if (finals.locked) {
-			syl = dict.find(s => {
-			    if (s.initial != -1) return false;
-			    return finals[s.final].locked;
-			});
-		    }
-		    if (syl) display.innerHTML = show(syl);
-		    else {
-			unlock(finals);
-			display.innerHTML = "";
-
-			unshadow(corner);
-			unshadowAll(initials);
-		    }
-		    lock(initials, corner);
-		    shadowAll(finals)
-		    dict.null.forEach(ff => unshadow(finals[ff]));
-		});
-
-		for (let is=0, i=0; is<sides.length; is++, i++) {
-		    let side = sides[is];
-
-		    if (side.className == "side-subgroup") continue;
-		    if (side.className == "side-group") {
-			i--;
-			let subs = [sides[is+1], sides[is+2]];
-
-			side.addEventListener("mouseover", () => {
-			    highlight(side);
-			    subs.forEach(sub => highlight(sub));
-			    surroundRows(initials, i+1, 2);
-			});
-			side.addEventListener("mouseleave", () => {
-			    unhighlight(side);
-			    subs.forEach(sub => unhighlight(sub));
-			    unsurroundRows(initials, i+1, 2);
-			});
-
-			subs.forEach((sub,ii) => {
-			    sub.addEventListener("mouseover", () => {
-				highlight(side);
-				highlight(sub);
-				surroundRow(initials, i+1+ii);
-			    });
-			    sub.addEventListener("mouseleave", () => {
-				unhighlight(side);
-				unhighlight(sub);
-				unsurroundRow(initials, i+1+ii);
-			    });
-			});
-		    } else {
-			side.addEventListener("mouseover", () => {
-			    highlight(side);
-			    surroundRow(initials, i);
-			});
-			side.addEventListener("mouseleave", () => {
-			    unhighlight(side);
-			    unsurroundRow(initials, i);
-			});
-		    }
-		}
-
-		for (let j=0; j<initials.ncol; j++) {
-		    let head = heads[j];
-		    head.addEventListener("mouseover", () => {
-			highlight(head);
-			surroundCol(initials, j);
-		    });
-		    head.addEventListener("mouseleave", () => {
-			unhighlight(head);
-			unsurroundCol(initials, j);
-		    });
-		}
-		for (let i=0, il=0, ir=0, lcd=0, rcd=0; i<finals.nrow; i++) {
-
-		    let left = lefts[il];
-		    if (il) {lcd--; if (lcd==-1) lcd=4; if (!lcd) il++;}
-		    else il++;
-
-		    let right = rights[ir];
-		    if (!ir) {rcd--; if (rcd==-1) rcd=1; if (!rcd) ir++;}
-		    else ir++;
-
-		    for (let j=0; j<finals.ncol; j++) {
-			let f = i*finals.ncol + j;
-
-			let cell = finals[f];
-			if (!cell.innerHTML) continue;
-			let top = tops[j];
-
-			cell.addEventListener("mouseover", () => {
-			    surround(cell);
-			    highlight(top);
-			    highlight(left);
-			    highlight(right);
-			});
-			cell.addEventListener("mouseleave", () => {
-			    unsurround(cell);
-			    unhighlight(top);
-			    unhighlight(left);
-			    unhighlight(right);
-			});
-
-
-			cell.addEventListener("click", () => {
-			    search.value = "";
-			    if (cell.locked) {
-				reset();
-				return;
-			    }
-
-			    unlock(specials);
-			    shadowAll(specials);
-
-			    let syl = undefined;
-			    if (initials.locked) {
-				syl = dict.find(s => {
-				    if (s.final != f) return false;
-				    if (s.initial == -1) return corner.locked;
-				    return initials[s.initial].locked;
-				});
-			    }
-			    if (syl) display.innerHTML = show(syl);
-			    else {
-				unlock(initials);
-				display.innerHTML = "";
-
-				unshadowAll(finals);
-			    }
-			    lock(finals, cell);
-			    shadowAll(initials);
-			    dict.initials[f].forEach(ll => unshadow(initials[ll]));
-			    if (dict.null.includes(f)) unshadow(corner); else shadow(corner);
-			});
-		    }
-		}
-
-		for (let il=0, lcd=0, i=0; il<lefts.length; il++, i++) {
-		    let left = lefts[il];
-
-		    if (il) {
-			i+=4;
-			left.addEventListener("mouseover", () => {
-			    highlight(left);
-			    surroundRows(finals, i-4, 5);
-			    highlight(leftHead);
-			});
-			left.addEventListener("mouseleave", () => {
-			    unhighlight(left);
-			    unsurroundRows(finals, i-4, 5);
-			    unhighlight(leftHead);
-			});
-		    } else {
-			left.addEventListener("mouseover", () => {
-			    highlight(left);
-			    surroundRow(finals, i);
-			    highlight(leftHead);
-			});
-			left.addEventListener("mouseleave", () => {
-			    unhighlight(left);
-			    unsurroundRow(finals, i);
-			    unhighlight(leftHead);
-			});
-		    }
-		}
-		for (let ir=0, rcd=0, i=0; ir<rights.length; ir++, i++) {
-		    let right = rights[ir];
-
-		    if (ir == 0 || ir == 5) {
-			right.addEventListener("mouseover", () => {
-			    highlight(rights[0]);
-			    surroundRows(finals, 0, 2);
-			    highlight(rights[5]);
-			    surroundRow(finals, 6);
-
-			    highlight(rightHead);
-			});
-			right.addEventListener("mouseleave", () => {
-			    unhighlight(rights[0]);
-			    unsurroundRows(finals, 0, 2);
-			    unhighlight(rights[5]);
-			    unsurroundRow(finals, 6);
-			    
-			    unhighlight(rightHead);
-			});
-			if (!ir) i++;
-		    } else {
-			let ii = i-1 < 5 ? +5 : -5;
-			let clone = rights[i-1 + ii];
-			right.addEventListener("mouseover", () => {
-			    highlight(right);
-			    surroundRow(finals, i);
-			    highlight(clone);
-			    surroundRow(finals, i + ii);
-
-			    highlight(rightHead);
-			});
-			right.addEventListener("mouseleave", () => {
-			    unhighlight(right);
-			    unsurroundRow(finals, i);
-			    unhighlight(clone);
-			    unsurroundRow(finals, i + ii);
-
-			    unhighlight(rightHead);
-			});
-		    }
-		}
-
-		for (let j=0; j<finals.ncol; j++) {
-		    let top = tops[j];
-		    top.addEventListener("mouseover", () => {
-			highlight(top);
-			surroundCol(finals, j);
-			highlight(topHead);
-		    });
-		    top.addEventListener("mouseleave", () => {
-			unhighlight(top);
-			unsurroundCol(finals, j);
-			unhighlight(topHead);
-		    });
-		}
-
-		function headerHover(headHead, heads) {
-		    headHead.addEventListener("mouseover", () => {
-			highlight(headHead);
-			for (let ih=0; ih<heads.length; ih++) highlight(heads[ih]);
-		    });
-		    headHead.addEventListener("mouseleave", () => {
-			unhighlight(headHead);
-			for (let ih=0; ih<heads.length; ih++) unhighlight(heads[ih]);
-		    });
-		}
-		headerHover(leftHead, lefts);
-		headerHover(rightHead, rights);
-		headerHover(topHead, tops);
-
-		search.addEventListener("keyup", () => {
-		    if (!search.value) {
-			reset();
-			return;
-		    }
-
-		    let syl = dict.find(s => s.pinyin == search.value);
-		    if (!syl) {
-			reset();
-			return;
-		    }
-		    display.innerHTML = show(syl);
-		    if (syl.final < 0) {
-			let special = specials[-syl.final-1];
-
-			unlock(finals);
-			lock(initials, corner);
-			lock(specials, special);
-			return;
-		    }
-
-		    unlock(specials);
-
-		    if (syl.initial == -1) {
-			lock(initials, corner);
-			shadowAll(finals)
-			dict.null.forEach(ff => unshadow(finals[ff]));
-		    }
-		    else {
-			lock(initials, initials[syl.initial])
-			shadowAll(finals);
-			dict.finals[syl.initial].forEach(ff => unshadow(finals[ff]));
-		    }
-
-		    lock(finals, finals[syl.final]);
-		    shadowAll(initials);
-		    dict.initials[syl.final].forEach(ll => unshadow(initials[ll]));
-		    if (dict.null.includes(syl.final)) unshadow(corner); else shadow(corner);
-		});
-
-		let root = document.documentElement;
-		alphabet.querySelectorAll(".choice").forEach((c,i) => c.addEventListener("click", () => {
-		    document.getElementById(root.dataset.alphabet).classList.remove("chosen");
-		    c.classList.add("chosen");
-		    root.dataset.alphabet = c.id;
-		    alphabet.querySelector(".knob").style.left = 3*i + "em";
-		}));
-
-		character.querySelectorAll(".choice").forEach((c,i) => c.addEventListener("click", () => {
-		    document.getElementById(root.dataset.character).classList.remove("chosen");
-		    c.classList.add("chosen");
-		    root.dataset.character = c.id;
-		    character.querySelector(".knob").style.left = 3*i + "em";
-		}));
-	    </script>
-	</main>
-    </body>
+<html>
+<head>
+    <meta charset="utf8">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
+        %3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'/%3E
+            %3Crect fill='%23b82132' width='64' height='64' x='0' y='0' /%3E
+            %3Ctext x='32' y='42' font-size='30' text-anchor='middle' fill='%23faf1ef'%3E%E4%B8%AD%3C/text%3E
+        %3C/svg%3E
+    ">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900">
+    <style type="text/css">
+        html {
+            --black: #2c0006;
+            --grey: #989593;
+            --white: #faf1ef;
+            --red: #B82132;
+
+            background-color: var(--white);
+            color: var(--black);
+            --border: 2px solid var(--red);
+            --padding-compensation: 3px;
+
+            font-size: 20px;
+            font-family: "Noto Sans", "Noto Sans SC", "Noto Sans TC", sans-serif;
+
+            &:has(#pin:checked) {
+                .pinyin { display: inline; }
+                .ipa { display: none; }
+                .bopomofo { display: none; }
+            }
+            &:has(#ipa:checked) {
+                .pinyin { display: none; }
+                .ipa { display: inline; }
+                .bopomofo { display: none; }
+            }
+            &:has(#bopo:checked) {
+                .pinyin { display: none; }
+                .ipa { display: none; }
+                .bopomofo { display: inline; }
+            }
+
+            &:has(#simp:checked) {
+                font-family: "Noto Sans", "Noto Sans SC", "Noto Sans TC", sans-serif;
+                .simplified { display: inline; }
+                .traditional { display: none; }
+            }
+            &:has(#trad:checked) {
+                font-family: "Noto Sans", "Noto Sans TC", sans-serif;
+                .simplified { display: none; }
+                .traditional { display: inline; }
+            }
+        }
+
+
+        header {
+            position: relative;
+            
+            margin: 1em 5em 1em 5em;
+            height: 3em;
+
+            display: grid;
+            place-items: center;
+        }
+        main {
+            margin: 0 5em 0 5em;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        section {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .radio {
+            position: absolute;
+
+            &#alphabet { left: 0; }
+            &#character { right: 0; }
+
+            display: flex;
+            flex-direction: row;
+
+            label {
+                display: grid;
+                place-items: center;
+
+                height: 3em;
+                width: 3em;
+
+                &:has(input:checked) {
+                    background-color: var(--red);
+                    color: var(--white);
+                }
+                input { display: none; }
+            }
+        }
+        #search {
+            height: 2em;
+            width: 20em;
+
+            font-size: inherit;
+            text-indent: 1em;
+
+            color: inherit; 
+            background-color: inherit;
+            border: var(--border);
+            &:focus {
+                outline: none;
+                border: 3px solid var(--red);
+            }
+        }
+        #display {
+            height: 4em;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 2em;
+        
+            .tone {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .character {
+                font-size: 2em;
+            }
+        }
+
+        #specials { align-self: flex-start; }
+        table {
+            border-spacing: 0;
+            font-size: inherit;
+
+            td, th {
+                text-align: center;
+                vertical-align: middle;
+
+                width: 4.5em;
+                height: 2.5em;
+                &.half-width { width: 2.25em; }
+                &[rowspan="2"] { height: 5em; }
+                &[rowspan="5"] { height: 12.5em; }
+
+                box-sizing: border-box;
+            }
+            th { font-weight: bold; }
+
+            td {
+                &:not(:empty, .locked):hover { border: var(--border); }
+                &.locked { border: 3px solid var(--red); }
+                &.shadow { font-weight: 300; color: var(--grey); }
+            }
+
+            tbody tr:has(td:not(:empty):hover) th, /* left headers on row hover */
+            tbody tr:has(+ tr td:not(:empty):hover) th[rowspan="2"], /* sup-header on next row */
+            &#initials tr:has(+ tr th:hover) th[rowspan="2"], /* sup-header on next sub-header hover */
+            &#finals tr:nth-child(2):has(~tr:nth-child(n+3):nth-child(-n+6) td:not(:empty):hover) th:first-child, /* #mid sup-header on next rows hover */
+            &#finals tr:nth-child(7):has(~tr:nth-child(n+8):nth-child(-n+11) td:not(:empty):hover) th:first-child, /* #low sup-header on next rows hover */
+            &#initials tbody tr:has(th[rowspan="2"]:hover) + tr th:first-child, /* sub-header on next row on sup-header hover */
+            tbody th[rowspan="2"]:has(+ th:hover), /* sup-header on sub-header hover */
+            tbody th[rowspan="2"]:hover + th, /* sub-header on sup-header hover */
+            th:hover, /* headers on hover */
+            &:has(thead tr:first-child th:first-child:hover) tbody th:first-child,/* left headers on head hover */
+            thead tr:first-child:has(th:nth-child(2):hover) + tr th,/* top headers on head hover */
+            &:has(thead tr:first-child th:last-child:hover) tbody th:last-child,/* right headers on head hover */
+            &:has(tbody td:not(:empty):nth-of-type(1):hover) thead tr:last-child th:nth-of-type(1), /* top headers on column hover */
+            &:has(td:not(:empty):nth-of-type(2):hover) thead tr:last-child th:nth-of-type(2),
+            &:has(td:not(:empty):nth-of-type(3):hover) thead tr:last-child th:nth-of-type(3),
+            &:has(td:not(:empty):nth-of-type(4):hover) thead th:nth-of-type(4),
+            &:has(td:not(:empty):nth-of-type(5):hover) thead th:nth-of-type(5),
+            tbody:has(tr:first-child th:last-child:hover) tr:nth-child(7) th:last-child, /* next clone row */
+            tbody:has(tr:nth-child(3) th:last-child:hover) tr:nth-child(8) th:last-child, 
+            tbody:has(tr:nth-child(4) th:last-child:hover) tr:nth-child(9) th:last-child,
+            tbody:has(tr:nth-child(5) th:last-child:hover) tr:nth-child(10) th:last-child,
+            tbody:has(tr:nth-child(6) th:last-child:hover) tr:last-child th:last-child,
+            tbody:has(tr:nth-child(7) th:last-child:hover) tr:first-child th:last-child, /* previous clone row */
+            tbody:has(tr:nth-child(8) th:last-child:hover) tr:nth-child(3) th:last-child,
+            tbody:has(tr:nth-child(9) th:last-child:hover) tr:nth-child(4) th:last-child,
+            tbody:has(tr:nth-child(10) th:last-child:hover) tr:nth-child(5) th:last-child,
+            tbody:has(tr:last-child th:last-child:hover) tr:nth-child(6) th:last-child {
+                background-color: var(--red);
+                color: var(--white);
+            }
+
+            /* row on left/right header hover */
+            tbody:has(tr:first-child th:last-child:hover) tr:nth-child(7) td:not(.locked), /* next clone row */
+            tbody:has(tr:nth-child(3) th:last-child:hover) tr:nth-child(8) td:not(.locked), 
+            tbody:has(tr:nth-child(4) th:last-child:hover) tr:nth-child(9) td:not(.locked),
+            tbody:has(tr:nth-child(5) th:last-child:hover) tr:nth-child(10) td:not(.locked),
+            tbody:has(tr:nth-child(6) th:last-child:hover) tr:last-child td:not(.locked),
+            tbody:has(tr:nth-child(8) th:last-child:hover) tr:nth-child(3) td:not(.locked), /* previous clone row */
+            tbody:has(tr:nth-child(9) th:last-child:hover) tr:nth-child(4) td:not(.locked),
+            tbody:has(tr:nth-child(10) th:last-child:hover) tr:nth-child(5) td:not(.locked),
+            tbody:has(tr:last-child th:last-child:hover) tr:nth-child(6) td:not(.locked),
+            tbody tr:has(th:not([rowspan]):hover) td:not(.locked) { /* top/bottom of row */
+                border-top: var(--border);
+                border-bottom: var(--border);
+            }
+            tbody:has(tr:nth-child(7) th:last-child:hover) tr:first-child td:not(.locked), /* previous clone row */
+            tr:has(th[rowspan]:hover) td:not(.locked) { /* top of row group */
+                border-top: var(--border);
+                padding-bottom: var(--padding-compensation);
+            }
+            tbody:has(tr:nth-child(7) th:last-child:hover) tr:nth-child(2) td:not(.locked), /* previous clone row */
+            tr:has(th[rowspan="2"]:hover) + tr td:not(.locked), /* bottom of row group */
+            /* :nth-child(4 of tr:has(th[rowspan="5"]:hover) ~ tr) td:not(.locked) { */
+            &#finals tr:nth-child(2):has(th:first-child:hover) ~ tr:nth-child(6) td:not(.locked), 
+            &#finals tr:nth-child(7):has(th:first-child:hover) ~ tr:last-child td:not(.locked) {
+                border-bottom: var(--border);
+                padding-top: var(--padding-compensation);
+
+            }
+            tbody:has(tr:first-child th:last-child:hover) tr:nth-child(7) td:not(.locked), /* next clone row */
+            tbody:has(tr:nth-child(3) th:last-child:hover) tr:nth-child(8) td:not(.locked), 
+            tbody:has(tr:nth-child(4) th:last-child:hover) tr:nth-child(9) td:not(.locked),
+            tbody:has(tr:nth-child(5) th:last-child:hover) tr:nth-child(10) td:not(.locked),
+            tbody:has(tr:nth-child(6) th:last-child:hover) tr:last-child td:not(.locked),
+            tbody:has(tr:nth-child(7) th:last-child:hover) tr:nth-child(-n+2) td:not(.locked), /* previous clone row */
+            tbody:has(tr:nth-child(8) th:last-child:hover) tr:nth-child(3) td:not(.locked),
+            tbody:has(tr:nth-child(9) th:last-child:hover) tr:nth-child(4) td:not(.locked),
+            tbody:has(tr:nth-child(10) th:last-child:hover) tr:nth-child(5) td:not(.locked),
+            tbody:has(tr:last-child th:last-child:hover) tr:nth-child(6) td:not(.locked),
+            tbody tr:has(th:hover) td:not(.locked), /* left/right of row/row group */
+            tr:has(th[rowspan="2"]:hover) + tr td:not(.locked), /* next row on left header hover */
+            /* :nth-child(-n+4 of tr:has(th[rowspan="5"]:hover) ~ tr) td:not(.locked) {  */
+            &#finals tr:nth-child(2):has(th:first-child:hover) ~ tr:nth-child(n+3):nth-child(-n+6) td:not(.locked), /* four following rows on left header hover */
+            &#finals tr:nth-child(7):has(th:first-child:hover) ~ tr:nth-child(n+8):nth-child(-n+11) td:not(.locked) { /* four following rows on left header hover */
+                &:first-of-type { 
+                    border-left: var(--border);
+                    padding-right: var(--padding-compensation);
+                }
+                &:last-of-type {
+                    border-right: var(--border);
+                    padding-left: var(--padding-compensation);
+                }
+            }
+
+            /* column on top header hover */
+            &:has(thead tr:last-child th:nth-of-type(1):hover) tbody tr:first-child td:nth-of-type(1):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(2):hover) tbody tr:first-child td:nth-of-type(2):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(3):hover) tbody tr:first-child td:nth-of-type(3):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(4):hover) tbody tr:first-child td:nth-of-type(4):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(5):hover) tbody tr:first-child td:nth-of-type(5):not(.locked) {
+                border-top: var(--border);
+                padding-bottom: var(--padding-compensation);
+            }
+            &:has(thead tr:last-child th:nth-of-type(1):hover) tbody tr:last-child td:nth-of-type(1):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(2):hover) tbody tr:last-child td:nth-of-type(2):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(3):hover) tbody tr:last-child td:nth-of-type(3):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(4):hover) tbody tr:last-child td:nth-of-type(4):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(5):hover) tbody tr:last-child td:nth-of-type(5):not(.locked) {
+                border-bottom: var(--border);
+                padding-top: var(--padding-compensation);
+            }
+            &:has(thead tr:last-child th:nth-of-type(1):hover) tbody td:nth-of-type(1):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(2):hover) tbody td:nth-of-type(2):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(3):hover) tbody td:nth-of-type(3):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(4):hover) tbody td:nth-of-type(4):not(.locked),
+            &:has(thead tr:last-child th:nth-of-type(5):hover) tbody td:nth-of-type(5):not(.locked) {
+                border-left: var(--border);
+                border-right: var(--border);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="alphabet" class="radio">
+            <label><input type="radio" name="alphabet" id="pin" checked>拼</label>
+            <label><input type="radio" name="alphabet" id="ipa">音</label>
+            <label><input type="radio" name="alphabet" id="bopo">住</label>
+        </div>
+        <input id="search" type="text" placeholder="search..."/>
+        <div id="character" class="radio">
+            <label><input type="radio" name="character" id="simp" style="font-family: 'Noto Sans SC'" checked>简</label>
+            <label><input type="radio" name="character" id="trad" style="font-family: 'Noto Sans TC'">繁</label>
+        </div>
+    </header>
+    <main>
+        <section>
+            <table id="initials">
+                <thead>
+                    <tr>
+                        <td colspan="2">Ø</td>
+                        <th><span class="simplified">唇</span><span class="traditional">唇</span></th>
+                        <th><span class="simplified">龈</span><span class="traditional">齦</span></th>
+                        <th><span class="simplified">卷舌</span><span class="traditional">卷舌</span></th>
+                        <th><span class="simplified">龈腭</span><span class="traditional">齦齶</span></th>
+                        <th><span class="simplified">软腭</span><span class="traditional">輭齶</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="2">鼻</th>
+                        <td><span class="pinyin">m</span><span class="ipa">[m]</span><span class="bopomofo">ㄇ</span></td>
+                        <td><span class="pinyin">n</span><span class="ipa">[n]</span><span class="bopomofo">ㄋ</span></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th rowspan="2" class="half-width">塞</th>
+                        <th class="half-width">气</th>
+                        <td><span class="pinyin">p</span><span class="ipa">[pʰ]</span><span class="bopomofo">ㄆ</span></td>
+                        <td><span class="pinyin">t</span><span class="ipa">[tʰ]</span><span class="bopomofo">ㄊ</span></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="pinyin">k</span><span class="ipa">[kʰ]</span><span class="bopomofo">ㄎ</span></td>
+                    </tr>
+                    <tr>
+                        <th class="half-width">不</th>
+                        <td><span class="pinyin">b</span><span class="ipa">[p]</span><span class="bopomofo">ㄅ</span></td>
+                        <td><span class="pinyin">d</span><span class="ipa">[t]</span><span class="bopomofo">ㄉ</span></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="pinyin">g</span><span class="ipa">[k]</span><span class="bopomofo">ㄍ</span></td>
+                    </tr>
+                    <tr>
+                        <th rowspan="2" class="half-width">塞<br/>擦</th>
+                        <th class="half-width">气</th>
+                        <td></td>
+                        <td><span class="pinyin">c</span><span class="ipa">[tsʰ]</span><span class="bopomofo">ㄘ</span></td>
+                        <td><span class="pinyin">ch</span><span class="ipa">[tʂʰ]</span><span class="bopomofo">ㄔ</span></td>
+                        <td><span class="pinyin">q</span><span class="ipa">[tɕʰ]</span><span class="bopomofo">ㄑ</span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th class="half-width">不</th>
+                        <td></td>
+                        <td><span class="pinyin">z</span><span class="ipa">[ts]</span><span class="bopomofo">ㄗ</span></td>
+                        <td><span class="pinyin">zh</span><span class="ipa">[tʂ]</span><span class="bopomofo">ㄓ</span></td>
+                        <td><span class="pinyin">j</span><span class="ipa">[tɕ]</span><span class="bopomofo">ㄐ</span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">擦</th>
+                        <td><span class="pinyin">f</span><span class="ipa">[f]</span><span class="bopomofo">ㄈ</span></td>
+                        <td><span class="pinyin">s</span><span class="ipa">[s]</span><span class="bopomofo">ㄙ</span></td>
+                        <td><span class="pinyin">sh</span><span class="ipa">[ʂ]</span><span class="bopomofo">ㄕ</span></td>
+                        <td><span class="pinyin">x</span><span class="ipa">[ɕ]</span><span class="bopomofo">ㄒ</span></td>
+                        <td><span class="pinyin">h</span><span class="ipa">[x]</span><span class="bopomofo">ㄏ</span></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">边</th>
+                        <td></td>
+                        <td><span class="pinyin">l</span><span class="ipa">[l]</span><span class="bopomofo">ㄌ</span></td>
+                        <td><span class="pinyin">r</span><span class="ipa">[ʐ]</span><span class="bopomofo">ㄖ</span></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="display"></div>
+        </section>
+        <table id="specials">
+            <thead>
+                <tr>
+                    <th><span class="simplified">儿</span><span class="traditional">兒</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="pinyin">er</span><span class="ipa">[ɚ]</span><span class="bopomofo">ㄦ</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="finals">
+            <thead>
+                <tr>
+                    <th rowspan="2"><span class="simplified">核</span><span class="traditional">核</span></th>
+                    <th colspan="4"><span class="simplified">中间</span><span class="traditional">中間</span></th>
+                    <th rowspan="2"><span class="simplified">尾</span><span class="traditional">尾</span></th>
+                </tr>
+                <tr>
+                    <th>Ø</th>
+                    <th>[w]</th>
+                    <th>[j]</th>
+                    <th>[ɥ]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th><span class="simplified">高</span><span class="traditional">高</span></th>
+                    <td><span class="pinyin">i</span><span class="ipa">[ɨ]</span><span class="bopomofo">ㄭ</span></td>
+                    <td><span class="pinyin">u</span><span class="ipa">[u]</span><span class="bopomofo">ㄨ</span></td>
+                    <td><span class="pinyin">i</span><span class="ipa">[i]</span><span class="bopomofo">ㄧ</span></td>
+                    <td><span class="pinyin">ü</span><span class="ipa">[y]</span><span class="bopomofo">ㄩ</span></td>
+                    <th rowspan="2">Ø</th>
+                </tr>
+                <tr>
+                    <th rowspan="5"><span class="simplified">中</span><span class="traditional">中</span></th>
+                    <td><span class="pinyin">e</span><span class="ipa">[ɤ]</span><span class="bopomofo">ㄜ</span></td>
+                    <td><span class="pinyin">uo</span><span class="ipa">[wo]</span><span class="bopomofo">ㄨㄛ</span></td>
+                    <td><span class="pinyin">ie</span><span class="ipa">[je]</span><span class="bopomofo">ㄧㄝ</span></td>
+                    <td><span class="pinyin">üe</span><span class="ipa">[ɥe]</span><span class="bopomofo">ㄩㄝ</span></td>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">ou</span><span class="ipa">[ou̯]</span><span class="bopomofo">ㄡ</span></td>
+                    <td></td>
+                    <td><span class="pinyin">iu</span><span class="ipa">[jou̯]</span><span class="bopomofo">ㄧㄡ</span></td>
+                    <td></td>
+                    <th>[u]</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><span class="pinyin">ei</span><span class="ipa">[ei̯]</span><span class="bopomofo">ㄟ</span></td>
+                    <td><span class="pinyin">ui</span><span class="ipa">[wei̯]</span><span class="bopomofo">ㄨㄟ</span></td>
+                    <td></td>
+                    <th>[i]</th>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">en</span><span class="ipa">[ən]</span><span class="bopomofo">ㄣ</span></td>
+                    <td><span class="pinyin">un</span><span class="ipa">[wən]</span><span class="bopomofo">ㄨㄣ</span></td>
+                    <td><span class="pinyin">in</span><span class="ipa">[in]</span><span class="bopomofo">ㄧㄣ</span></td>
+                    <td><span class="pinyin">ün</span><span class="ipa">[yn]</span><span class="bopomofo">ㄩㄣ</span></td>
+                    <th>[n]</th>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">eng</span><span class="ipa">[əŋ]</span><span class="bopomofo">ㄥ</span></td>
+                    <td><span class="pinyin">ong</span><span class="ipa">[ʊŋ]</span><span class="bopomofo">ㄨㄥ</span></td>
+                    <td><span class="pinyin">ing</span><span class="ipa">[iŋ]</span><span class="bopomofo">ㄧㄥ</span></td>
+                    <td><span class="pinyin">iong</span><span class="ipa">[jʊŋ]</span><span class="bopomofo">ㄩㄥ</span></td>
+                    <th>[ŋ]</th>
+                </tr>
+                <tr>
+                    <th rowspan="5"><span class="simplified">低</span><span class="traditional">低</span></th>
+                    <td><span class="pinyin">a</span><span class="ipa">[a]</span><span class="bopomofo">ㄚ</span></td>
+                    <td><span class="pinyin">ua</span><span class="ipa">[wa]</span><span class="bopomofo">ㄨㄚ</span></td>
+                    <td><span class="pinyin">ia</span><span class="ipa">[ja]</span><span class="bopomofo">ㄧㄚ</span></td>
+                    <td></td>
+                    <th>Ø</th>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">ao</span><span class="ipa">[au̯]</span><span class="bopomofo">ㄠ</span></td>
+                    <td></td>
+                    <td><span class="pinyin">iao</span><span class="ipa">[jau̯]</span><span class="bopomofo">ㄧㄠ</span></td>
+                    <td></td>
+                    <th>[u]</th>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">ai</span><span class="ipa">[ai̯]</span><span class="bopomofo">ㄞ</span></td>
+                    <td><span class="pinyin">uai</span><span class="ipa">[wai̯]</span><span class="bopomofo">ㄨㄞ</span></td>
+                    <td></td>
+                    <td></td>
+                    <th>[i]</th>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">an</span><span class="ipa">[an]</span><span class="bopomofo">ㄢ</span></td>
+                    <td><span class="pinyin">uan</span><span class="ipa">[wan]</span><span class="bopomofo">ㄨㄢ</span></td>
+                    <td><span class="pinyin">ian</span><span class="ipa">[jɛn]</span><span class="bopomofo">ㄧㄢ</span></td>
+                    <td><span class="pinyin">üan</span><span class="ipa">[ɥɛn]</span><span class="bopomofo">ㄩㄢ</span></td>
+                    <th>[n]</th>
+                </tr>
+                <tr>
+                    <td><span class="pinyin">ang</span><span class="ipa">[aŋ]</span><span class="bopomofo">ㄤ</span></td>
+                    <td><span class="pinyin">uang</span><span class="ipa">[waŋ]</span><span class="bopomofo">ㄨㄤ</span></td>
+                    <td><span class="pinyin">iang</span><span class="ipa">[jaŋ]</span><span class="bopomofo">ㄧㄤ</span></td>
+                    <td></td>
+                    <th>[ŋ]</th>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    <script>
+        let dictionnary = [
+            // {initial: -2, final: -3, pinyin: "ê", simps: ["","","","",""], trads: ["","","","",""]},
+            // {initial: -2, final: -2, pinyin: "o", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -2, final: -1, pinyin: "er", simps: ["","儿","耳","二",""], trads: ["","兒","耳","二",""]},
+            {initial: -1, final: 1, pinyin: "wu", simps: ["屋","无","五","物",""], trads: ["屋","無","五","物",""]},
+            {initial: -1, final: 2, pinyin: "yi", simps: ["一","","以","义",""], trads: ["一","","以","義",""]},
+            {initial: -1, final: 3, pinyin: "yu", simps: ["","鱼","雨","",""], trads: ["","魚","雨","",""]},
+            {initial: -1, final: 4, pinyin: "eoe", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 5, pinyin: "wo", simps: ["","","我","",""], trads: ["","","我","",""]},
+            {initial: -1, final: 6, pinyin: "ye", simps: ["","","","叶",""], trads: ["","","","葉",""]},
+            {initial: -1, final: 7, pinyin: "yue", simps: ["","","","月",""], trads: ["","","","月",""]},
+            {initial: -1, final: 8, pinyin: "ou", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 10, pinyin: "you", simps: ["","","有","",""], trads: ["","","有","",""]},
+            {initial: -1, final: 12, pinyin: "ei", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 13, pinyin: "wei", simps: ["","为","","",""], trads: ["","為","","",""]},
+            {initial: -1, final: 16, pinyin: "en", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 17, pinyin: "wen", simps: ["","文","","问",""], trads: ["","文","","問",""]},
+            {initial: -1, final: 18, pinyin: "yin", simps: ["阴","","","",""], trads: ["陰","","","",""]},
+            // {initial: -1, final: 19, pinyin: "yun", simps: ["","","","",""], trads: ["","","","",""]},
+            // {initial: -1, final: 20, pinyin: "eng", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 21, pinyin: "weng", simps: ["翁","","","",""], trads: ["翁","","","",""]},
+            // {initial: -1, final: 22, pinyin: "ying", simps: ["","","","",""], trads: ["","","","",""]},
+            // {initial: -1, final: 23, pinyin: "yong", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 24, pinyin: "a", simps: ["","","","","啊"], trads: ["","","","","啊"]},
+            {initial: -1, final: 25, pinyin: "wa", simps: ["蛙","娃","","",""], trads: ["蛙","娃","","",""]},
+            {initial: -1, final: 26, pinyin: "ya", simps: ["","牙","","",""], trads: ["","牙","","",""]},
+            {initial: -1, final: 28, pinyin: "ao", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 30, pinyin: "yao", simps: ["要","","","",""], trads: ["要","","","",""]},
+            {initial: -1, final: 32, pinyin: "ai", simps: ["","","","爱",""], trads: ["","","","愛",""]},
+            {initial: -1, final: 33, pinyin: "wai", simps: ["","","","外",""], trads: ["","","","外",""]},
+            {initial: -1, final: 36, pinyin: "an", simps: ["安","","","",""], trads: ["安","","","",""]},
+            {initial: -1, final: 37, pinyin: "wan", simps: ["","","","万",""], trads: ["","","","萬",""]},
+            {initial: -1, final: 38, pinyin: "yan", simps: ["","言","眼","",""], trads: ["","言","眼","",""]},
+            {initial: -1, final: 39, pinyin: "yuan", simps: ["","元","","",""], trads: ["","元","","",""]},
+            {initial: -1, final: 40, pinyin: "ang", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: -1, final: 41, pinyin: "wang", simps: ["","王","网","",""], trads: ["","王","網","",""]},
+            {initial: -1, final: 42, pinyin: "yang", simps: ["","阳","","",""], trads: ["","陽","","",""]},
+            {initial: 0, final: 1, pinyin: "mu", simps: ["","","母","木",""], trads: ["","","母","木",""]},
+            {initial: 0, final: 2, pinyin: "mi", simps: ["","","米","",""], trads: ["","","米","",""]},
+            {initial: 0, final: 4, pinyin: "me", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 0, final: 5, pinyin: "mo", simps: ["","","",""], trads: ["","","","",""]},
+            {initial: 0, final: 6, pinyin: "mie", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 0, final: 8, pinyin: "mou", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 0, final: 10, pinyin: "miu", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 0, final: 12, pinyin: "mei", simps: ["","","每","",""], trads: ["","","每","",""]},
+            {initial: 0, final: 16, pinyin: "men", simps: ["","","","","们"], trads: ["","","","","們"]},
+            {initial: 0, final: 18, pinyin: "min", simps: ["","民","","",""], trads: ["","民","","",""]},
+            {initial: 0, final: 20, pinyin: "meng", simps: ["","","","梦",""], trads: ["","","","夢",""]},
+            {initial: 0, final: 22, pinyin: "ming", simps: ["","明","","命",""], trads: ["","明","","命",""]},
+            {initial: 0, final: 24, pinyin: "ma", simps: ["妈","麻","马", "骂", "吗"], trads: ["媽","麻","馬","罵","嗎"]},
+            {initial: 0, final: 28, pinyin: "mao", simps: ["猫","毛","","",""], trads: ["貓","毛","","",""]},
+            {initial: 0, final: 30, pinyin: "miao", simps: ["","","秒","妙",""], trads: ["","","秒","妙",""]},
+            {initial: 0, final: 32, pinyin: "mai", simps: ["","","买","卖",""], trads: ["","","買","賣",""]},
+            {initial: 0, final: 36, pinyin: "man", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 0, final: 38, pinyin: "mian", simps: ["","眠","免","面",""], trads: ["","眠","免","麵",""]},
+            {initial: 0, final: 40, pinyin: "mang", simps: ["","忙","","",""], trads: ["","忙","","",""]},
+            {initial: 1, final: 1, pinyin: "nu", simps: ["","","","怒",""], trads: ["","","","怒",""]},
+            {initial: 1, final: 2, pinyin: "ni", simps: ["","","你","",""], trads: ["","","你","",""]},
+            {initial: 1, final: 3, pinyin: "nü", simps: ["","","女","",""], trads: ["","","女","",""]},
+            {initial: 1, final: 4, pinyin: "ne", simps: ["","","","","呢"], trads: ["","","","","呢"]},
+            {initial: 1, final: 5, pinyin: "nuo", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 1, final: 6, pinyin: "nie", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 1, final: 7, pinyin: "nüe", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 1, final: 8, pinyin: "nou", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 1, final: 10, pinyin: "niu", simps: ["","牛","","",""], trads: ["","牛","","",""]},
+            {initial: 1, final: 12, pinyin: "nei", simps: ["","","","内",""], trads: ["","","","內",""]},
+            {initial: 1, final: 16, pinyin: "nen", simps: ["","","","嫩",""], trads: ["","","","嫩",""]}, // only one unusual character
+            {initial: 1, final: 17, pinyin: "nun", simps: ["","黁","","",""], trads: ["","","","",""]}, // only one unusual character
+            {initial: 1, final: 18, pinyin: "nin", simps: ["","您","","",""], trads: ["","您","","",""]},
+            {initial: 1, final: 20, pinyin: "neng", simps: ["","能","","",""], trads: ["","能","","",""]}, // only one character
+            {initial: 1, final: 21, pinyin: "nong", simps: ["","农","","",""], trads: ["","農","","",""]},
+            {initial: 1, final: 22, pinyin: "ning", simps: ["","宁","","",""], trads: ["","寧","","",""]},
+            {initial: 1, final: 24, pinyin: "na", simps: ["","","哪","那",""], trads: ["","","哪","那",""]},
+            {initial: 1, final: 28, pinyin: "nao", simps: ["","","脑","",""], trads: ["","","腦","",""]},
+            {initial: 1, final: 30, pinyin: "niao", simps: ["","","鸟","尿",""], trads: ["","","鳥","尿",""]},
+            {initial: 1, final: 32, pinyin: "nai", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 1, final: 36, pinyin: "nan", simps: ["","南","","",""], trads: ["","南","","",""]},
+            {initial: 1, final: 37, pinyin: "nuan", simps: ["","","暖","",""], trads: ["","","暖","",""]},
+            {initial: 1, final: 38, pinyin: "nian", simps: ["","年","","念",""], trads: ["","年","","念",""]},
+            {initial: 1, final: 40, pinyin: "nang", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 1, final: 42, pinyin: "niang", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 1, pinyin: "pu", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 2, pinyin: "pi", simps: ["","皮","","",""], trads: ["","皮","","",""]},
+            {initial: 5, final: 5, pinyin: "po", simps: ["","婆","","破",""], trads: ["","婆","","破",""]},
+            {initial: 5, final: 6, pinyin: "pei", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 8, pinyin: "pen", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 12, pinyin: "pin", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 16, pinyin: "peng", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 5, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 6, final: 1, pinyin: "tu", simps: ["","图","土","兔",""], trads: ["","圖","土","兔",""]},
+            {initial: 6, final: 2, pinyin: "ti", simps: ["","题","体","",""], trads: ["","題","體","",""]},
+            {initial: 6, final: 4, pinyin: "te", simps: ["","","","特",""], trads: ["","","","特",""]},
+            {initial: 6, final: 5, pinyin: "tuo", simps: ["脱","","","",""], trads: ["脫","","","",""]},
+            {initial: 6, final: 6, pinyin: "tie", simps: ["贴","","铁","",""], trads: ["貼","","鋨","",""]},
+            {initial: 6, final: 8, pinyin: "tou", simps: ["","头","","",""], trads: ["","頭","","",""]},
+            {initial: 6, final: 13, pinyin: "tui", simps: ["推","","","退",""], trads: ["推","","","退",""]},
+            {initial: 6, final: 17, pinyin: "tun", simps: ["","豚","","",""], trads: ["","豚","","",""]},
+            {initial: 6, final: 20, pinyin: "teng", simps: ["","疼","","",""], trads: ["","疼","","",""]},
+            {initial: 6, final: 21, pinyin: "tong", simps: ["同","童","","痛",""], trads: ["同","童","","痛",""]},
+            {initial: 6, final: 22, pinyin: "ting", simps: ["听","停","","",""], trads: ["聽","停","","",""]},
+            {initial: 6, final: 24, pinyin: "ta", simps: ["他","","塔","踏",""], trads: ["他","","塔","踏",""]},
+            {initial: 6, final: 28, pinyin: "tao", simps: ["","逃","","",""], trads: ["","逃","","",""]},
+            {initial: 6, final: 30, pinyin: "tiao", simps: ["","","","跳",""], trads: ["","","","跳",""]},
+            {initial: 6, final: 32, pinyin: "tai", simps: ["台","","","太",""], trads: ["台","","","太",""]},
+            {initial: 6, final: 36, pinyin: "tan", simps: ["","谈","毯","",""], trads: ["","談","毯","",""]},
+            {initial: 6, final: 37, pinyin: "tuan", simps: ["圕","","","",""], trads: ["圕","","","",""]},
+            {initial: 6, final: 38, pinyin: "tian", simps: ["天","田","","",""], trads: ["天","田","","",""]},
+            {initial: 6, final: 40, pinyin: "tang", simps: ["汤","糖","","",""], trads: ["湯","糖","","",""]},
+            {initial: 9, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 9, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 10, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 10, pinyin: "diu", simps: ["丢","","","",""], trads: ["丟","","","",""]}, // only one unusual character
+            {initial: 11, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 11, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 8, pinyin: "guo", simps: ["","国","","",""], trads: ["","國","","",""]},
+            {initial: 14, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 14, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 16, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 21, pinyin: "chong", simps: ["","虫","","",""], trads: ["","蟲","","",""]},
+            {initial: 17, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 17, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 12, pinyin: "zei", simps: ["","贼","","",""], trads: ["","賊","","",""]},
+            {initial: 18, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 19, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 23, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 26, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 39, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 18, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 21, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 21, pinyin: "zhong", simps: ["中","","种","重",""], trads: ["中","","種","重",""]},
+            {initial: 22, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 22, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 19, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 23, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 26, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 39, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 23, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 25, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 26, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 12, pinyin: "shei", simps: ["","谁","","",""], trads: ["","誰","","",""]},
+            {initial: 27, final: 13, pinyin: "shui", simps: ["","谁","水","睡",""], trads: ["","誰","水","睡",""]},
+            {initial: 27, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 27, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 19, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 23, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 26, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 39, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 28, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 25, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 33, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 29, final: 41, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 2, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 3, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 6, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 7, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 10, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 12, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 18, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 22, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 24, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 30, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 32, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 38, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 31, final: 42, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 0, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 1, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 4, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 5, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 8, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 13, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 16, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 17, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 20, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 21, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 28, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 36, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 37, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]},
+            {initial: 32, final: 40, pinyin: "", simps: ["","","","",""], trads: ["","","","",""]}
+        ]
+
+        dictionnary.i2f = Array.from(Array(7*5), (_,i) => dictionnary.reduce((acc,syl) => syl.initial == i ? acc.concat(syl.final) : acc, []));
+        dictionnary.n2f = dictionnary.reduce((acc, syl) => syl.initial == -1 ? acc.concat(syl.final) : acc, []);
+        dictionnary.f2i = Array.from(Array(11*4), (_,f) => dictionnary.reduce((acc,syl) => syl.final == f && syl.initial != -1 ? acc.concat(syl.initial) : acc, []));
+
+        // dei, tei
+        // o, ê, yo, lo
+        // hng, hm, m, ng
+
+        let search = document.getElementById("search");
+
+        let display = document.getElementById("display");
+
+        function show(syl) {
+            display.innerHTML = "";
+            if (!syl) return;
+            for (let t=0; t<5; t++) {
+                let sc = syl.simps[t];
+                let tc = syl.trads[t];
+                if (!sc) continue;
+                let tone = document.createElement("DIV");
+                let char = document.createElement("SPAN");
+                let trad = document.createElement("SPAN");
+                let pinyin = document.createElement("SPAN");
+
+                tone.className = "tone";
+                char.className = "character simplified";
+                trad.className = "character traditional";
+                // pinyin.className = "pinyin";
+
+                char.innerText = sc;
+                trad.innerText = tc;
+
+                let d = ['\u0304', '\u0301', '\u030C', '\u0300', ''][t];
+                pinyin.innerText = syl.pinyin.replace(/(ch|zh|sh|[mpbfntdczslrqjxkghwy])?(i|u)?([aeiou])(.*)/, (_, i, m, n, c) => (i||"") + (m||"") + n + d + c);
+
+                tone.appendChild(char);
+                tone.appendChild(trad);
+                tone.appendChild(pinyin);
+                display.appendChild(tone);
+            }
+        }
+
+        let corner = document.querySelector("#initials td");
+        let initials = document.querySelectorAll("#initials tbody td");
+        let finals = document.querySelectorAll("#finals tbody td");
+        let specials = document.querySelectorAll("#specials tbody td");
+
+        initials.locked = null;
+        finals.locked = null;
+
+        function unlock(table) {
+            if (!table.locked) return;
+            table.locked.cell.locked = false;
+            table.locked.cell.classList.remove("locked");
+            table.locked = null;
+        }
+
+        function lock(table, cell, id) {
+            unlock(table);
+            cell.locked = true;
+            table.locked = {cell, id};
+            cell.classList.add("locked");
+        }
+
+        corner.addEventListener("click", () => {
+            search.value = "";
+            if (corner.locked) {
+                show(null);
+                unlock(initials);
+                finals.forEach(fin => fin.classList.remove("shadow"));
+
+                unlock(specials);
+                return;
+            }
+
+            specials.forEach(spe => spe.classList.remove("shadow"));
+
+            let syl = undefined;
+            if (finals.locked) {
+                syl = dictionnary.find(s => {
+                    if (s.initial != -1) return false;
+                    return s.final == finals.locked.id;
+                });
+            }
+            if (!syl) {
+                unlock(finals);
+                corner.classList.remove("shadow");
+                initials.forEach(ini => ini.classList.remove("shadow"));
+            }
+
+            lock(initials, corner, -1);
+            show(syl);
+
+            let j = 0;
+            dictionnary.n2f.forEach(f => {
+                while (j<f) finals[j++].classList.add("shadow");
+                finals[j++].classList.remove("shadow");
+            });
+            while (j<finals.length) finals[j++].classList.add("shadow");
+        });
+        initials.forEach((cell, i) => {
+            cell.addEventListener("click", () => {
+                search.value = "";
+                if (cell.locked) {
+                    show(null);
+                    unlock(initials);
+                    finals.forEach(fin => fin.classList.remove("shadow"));
+                    return;
+                }
+
+                unlock(specials);
+                specials.forEach(spe => spe.classList.add("shadow"));
+
+                let syl = undefined;
+                if (finals.locked) {
+                    syl = dictionnary.find(s => {
+                        if (s.initial != i) return false;
+                        return s.final == finals.locked.id;
+                    });
+                }
+                if (!syl) {
+                    unlock(finals);
+                    corner.classList.remove("shadow");
+                    initials.forEach(ini => ini.classList.remove("shadow"));
+                }
+
+                lock(initials, cell, i);
+                show(syl);
+
+                let j = 0;
+                dictionnary.i2f[i].forEach(f => {
+                    while (j<f) finals[j++].classList.add("shadow");
+                    finals[j++].classList.remove("shadow");
+                });
+                while (j<finals.length) finals[j++].classList.add("shadow");
+            });
+        });
+        finals.forEach((cell, f) => {
+            cell.addEventListener("click", () => {
+                search.value = "";
+                if (cell.locked) {
+                    show(null);
+                    unlock(finals);
+                    corner.classList.remove("shadow");
+                    initials.forEach(ini => ini.classList.remove("shadow"));
+                    return;
+                }
+
+                unlock(specials);
+
+                let syl = dictionnary.find(s => {
+                    if (s.final != f) return false;
+                    return s.initial == (initials.locked?.id ?? -1);
+                });
+                if (initials.locked && syl) {
+                    if (dictionnary.n2f.includes(f)) corner.classList.remove("shadow");
+                    else corner.classList.add("shadow");
+                } else if (syl) {
+                    lock(initials, corner, -1);
+                    corner.classList.remove("shadow");
+
+                    let j = 0;
+                    dictionnary.n2f.forEach(f => {
+                        while (j<f) finals[j++].classList.add("shadow");
+                        finals[j++].classList.remove("shadow");
+                    });
+                    while (j<finals.length) finals[j++].classList.add("shadow");
+                } else {
+                    unlock(initials);
+                    finals.forEach(fin => fin.classList.remove("shadow"));
+                    corner.classList.add("shadow");
+                }
+
+                lock(finals, cell, f);
+                show(syl);
+
+                let j = 0;
+                dictionnary.f2i[f].forEach(i => {
+                    while (j<i) initials[j++].classList.add("shadow");
+                    initials[j++].classList.remove("shadow");
+                });
+                while (j<initials.length) initials[j++].classList.add("shadow");
+            });
+        });
+        specials.forEach((cell, s) => {
+            cell.addEventListener("click", () => {
+                search.value = "";
+                if (cell.locked) {
+                    unlock(specials);
+                    unlock(initials);
+
+                    initials.forEach(ini => ini.classList.remove("shadow"));
+                    return;
+                }
+
+                lock(specials, cell, -s-1);
+                lock(initials, corner, -1);
+                unlock(finals);
+
+                corner.classList.remove("shadow");
+                initials.forEach(ini => ini.classList.add("shadow"));
+
+                let j = 0;
+                dictionnary.n2f.forEach(f => {
+                    while (j<f) finals[j++].classList.add("shadow");
+                    finals[j++].classList.remove("shadow");
+                });
+                while (j<finals.length) finals[j++].classList.add("shadow");
+
+                specials.forEach(spe => spe.classList.remove("shadow"));
+
+                show(dictionnary.find(syl => syl.final == -s-1))
+            });
+        });
+
+        search.addEventListener("keyup", () => {
+            if (!search.value) {
+                show(null);
+                unlock(initials);
+                unlock(finals);
+                unlock(specials);
+                corner.classList.remove("shadow");
+                initials.forEach(ini => ini.classList.remove("shadow"));
+                finals.forEach(fin => fin.classList.remove("shadow"));
+                specials.forEach(spe => spe.classList.remove("shadow"));
+                return;
+            }
+
+            let syl = dictionnary.find(s => s.pinyin == search.value);
+            if (!syl) {
+                show(null);
+                unlock(initials);
+                unlock(finals);
+                unlock(specials);
+                corner.classList.remove("shadow");
+                initials.forEach(ini => ini.classList.remove("shadow"));
+                finals.forEach(fin => fin.classList.remove("shadow"));
+                specials.forEach(spe => spe.classList.remove("shadow"));
+                return;
+            }
+            show(syl);
+            if (syl.final < 0) {
+                unlock(finals);
+                lock(initials, corner, -1);
+                lock(specials, specials[-syl.final-1], syl.final);
+                return;
+            }
+
+            unlock(specials);
+            if (syl.initial == -1) {
+                lock(initials, corner, -1);
+
+                let j = 0;
+                dictionnary.n2f.forEach(f => {
+                    while (j<f) finals[j++].classList.add("shadow");
+                    finals[j++].classList.remove("shadow");
+                });
+                while (j<finals.length) finals[j++].classList.add("shadow");
+            }
+            else {
+                lock(initials, initials[syl.initial], syl.initial);
+
+                let j = 0;
+                dictionnary.i2f[syl.initial].forEach(f => {
+                    while (j<f) finals[j++].classList.add("shadow");
+                    finals[j++].classList.remove("shadow");
+                });
+                while (j<finals.length) finals[j++].classList.add("shadow");
+
+                specials.forEach(spe => spe.classList.add("shadow"));
+            }
+
+            lock(finals, finals[syl.final], syl.final);
+
+            let j = 0;
+            dictionnary.f2i[syl.final].forEach(i => {
+                while (j<i) initials[j++].classList.add("shadow");
+                initials[j++].classList.remove("shadow");
+            });
+            while (j<initials.length) initials[j++].classList.add("shadow");
+            if (dictionnary.n2f.includes(syl.final)) corner.classList.remove("shadow");
+            else corner.classList.add("shadow");
+        });
+    </script>
+</body>
 </html>
