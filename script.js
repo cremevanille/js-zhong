@@ -137,27 +137,37 @@ finals.forEach((cell, f) => {
 
         unlock(specials);
 
-        let syl = dictionary.find(s => {
-            if (s.final != f) return false;
-            return s.initial == (initials.locked?.id ?? -1);
-        });
-        if (initials.locked && syl) {
-            if (dictionary.n2f.includes(f)) corner.classList.remove("shadow");
-            else corner.classList.add("shadow");
-        } else if (syl) {
-            lock(initials, corner, -1);
-            corner.classList.remove("shadow");
-
-            let j = 0;
-            dictionary.n2f.forEach(f => {
-                while (j<f) finals[j++].classList.add("shadow");
-                finals[j++].classList.remove("shadow");
+        let syl = undefined;
+        if (initials.locked) {
+            syl = dictionary.find(s => {
+                if (s.final != f) return false;
+                return s.initial == initials.locked.id;
             });
-            while (j<finals.length) finals[j++].classList.add("shadow");
-        } else {
-            unlock(initials);
-            finals.forEach(fin => fin.classList.remove("shadow"));
-            corner.classList.add("shadow");
+            if (syl) {
+                if (dictionary.n2f.includes(f)) corner.classList.remove("shadow");
+                else corner.classList.add("shadow");
+            }
+        }
+        if (!syl) {
+            syl = dictionary.find(s => {
+                if (s.final != f) return false;
+                return s.initial == -1;
+            });
+            if (syl) {
+                lock(initials, corner, -1);
+                corner.classList.remove("shadow");
+
+                let j = 0;
+                dictionary.n2f.forEach(f => {
+                    while (j<f) finals[j++].classList.add("shadow");
+                    finals[j++].classList.remove("shadow");
+                });
+                while (j<finals.length) finals[j++].classList.add("shadow");
+            } else {
+                unlock(initials);
+                finals.forEach(fin => fin.classList.remove("shadow"));
+                corner.classList.add("shadow");
+            }
         }
 
         lock(finals, cell, f);
