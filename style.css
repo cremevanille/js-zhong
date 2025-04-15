@@ -166,15 +166,15 @@ table {
         &.shadow { font-weight: 200; color: var(--grey); }
     }
 
+    th:hover, /* headers on hover */
     tbody tr:has(td:not(:empty):hover) th, /* left headers on row hover */
-    tbody tr:has(+ tr td:not(:empty):hover) th[rowspan="2"], /* sup-header on next row */
-    &#initials tr:has(+ tr th:hover) th[rowspan="2"], /* sup-header on next sub-header hover */
+    &#initials tbody tr:has(th[rowspan="2"]:hover) + tr th:first-child, /* sub-header on next row on sup-header hover */
+    tbody tr:has(+ tr td:not(:empty):hover) th[rowspan="2"], /* sup-header on next row hover */
+    &#initials tr:has(+ tr th:hover) th[rowspan="2"], /* sup-header on next row sub-header hover */
+    tbody th[rowspan="2"]:has(+ th:hover), /* sup-header on sub-header hover */
+    tbody th[rowspan="2"]:hover + th, /* next row sub-header on sup-header hover */
     &#finals tr:nth-child(2):has(~tr:nth-child(n+3):nth-child(-n+6) td:not(:empty):hover) th:first-child, /* #mid sup-header on next rows hover */
     &#finals tr:nth-child(7):has(~tr:nth-child(n+8):nth-child(-n+11) td:not(:empty):hover) th:first-child, /* #low sup-header on next rows hover */
-    &#initials tbody tr:has(th[rowspan="2"]:hover) + tr th:first-child, /* sub-header on next row on sup-header hover */
-    tbody th[rowspan="2"]:has(+ th:hover), /* sup-header on sub-header hover */
-    tbody th[rowspan="2"]:hover + th, /* sub-header on sup-header hover */
-    th:hover, /* headers on hover */
     &:has(thead tr:first-child th:first-child:hover) tbody th:first-child,/* left headers on head hover */
     thead tr:first-child:has(th:nth-child(2):hover) + tr th,/* top headers on head hover */
     &:has(thead tr:first-child th:last-child:hover) tbody th:last-child,/* right headers on head hover */

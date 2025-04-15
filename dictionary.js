@@ -114,82 +114,84 @@ export const dictionary = [
     {initial: 6, final: 37, pinyin: "tuan", simps: ["圕","","","",""], trads: ["圕","","","",""]},
     {initial: 6, final: 38, pinyin: "tian", simps: ["天","田","","",""], trads: ["天","田","","",""]},
     {initial: 6, final: 40, pinyin: "tang", simps: ["汤","糖","","",""], trads: ["湯","糖","","",""]},
-    // from here NOT: no other tone, NOR: no other radical
-    {initial: 9, final: 1, pinyin: "ku", simps: ["哭","","苦","库",""], trads: ["哭","","苦","庫",""]}, // NOT
-    {initial: 9, final: 4, pinyin: "ke", simps: ["科","壳","可","克",""], trads: ["科","殼","可","克",""]}, // NOT
-    {initial: 9, final: 5, pinyin: "kuo", simps: ["","","","扩",""], trads: ["","","","擴",""]}, // NOT
-    {initial: 9, final: 8, pinyin: "kou", simps: ["抠","","口","叩",""], trads: ["摳","","口","叩",""]}, // NOT
+
+    // from here !T: no other tone, !R: no other radical, !C: no other 
+
+    {initial: 9, final: 1, pinyin: "ku", simps: ["哭","","苦","库",""], trads: ["哭","","苦","庫",""]}, // !T
+    {initial: 9, final: 4, pinyin: "ke", simps: ["科","壳","可","克",""], trads: ["科","殼","可","克",""]}, // !T
+    {initial: 9, final: 5, pinyin: "kuo", simps: ["","","","扩",""], trads: ["","","","擴",""]}, // !T
+    {initial: 9, final: 8, pinyin: "kou", simps: ["抠","","口","叩",""], trads: ["摳","","口","叩",""]}, // !T
     // {initial: 9, final: 12, pinyin: "kei", simps: ["","","","",""], trads: ["","","","",""]}, // only colloquial dialect
     {initial: 9, final: 13, pinyin: "kui", simps: ["亏","","","溃",""], trads: ["虧","","","潰",""]},
-    {initial: 9, final: 16, pinyin: "ken", simps: ["","","垦","裉",""], trads: ["","","墾","裉",""]}, // NOT
-    {initial: 9, final: 17, pinyin: "kun", simps: ["昆","","捆","困",""], trads: ["昆","","捆","困",""]}, // NOT
-    {initial: 9, final: 20, pinyin: "keng", simps: ["坑","","","",""], trads: ["坑","","","",""]}, // NOT
-    {initial: 9, final: 21, pinyin: "kong", simps: ["空","","恐","控",""], trads: ["空","","恐","控",""]}, // NOT, 孔
+    {initial: 9, final: 16, pinyin: "ken", simps: ["","","垦","裉",""], trads: ["","","墾","裉",""]}, // !T
+    {initial: 9, final: 17, pinyin: "kun", simps: ["昆","","捆","困",""], trads: ["昆","","捆","困",""]}, // !T
+    {initial: 9, final: 20, pinyin: "keng", simps: ["坑","","","",""], trads: ["坑","","","",""]}, // !T
+    {initial: 9, final: 21, pinyin: "kong", simps: ["空","","恐","控",""], trads: ["空","","恐","控",""]}, // !T, 孔
     {initial: 9, final: 24, pinyin: "ka", simps: ["咖","","卡","",""], trads: ["咖","","卡","",""]}, // bound forms and onomatopoeia
-    {initial: 9, final: 25, pinyin: "kua", simps: ["夸","","垮","跨",""], trads: ["誇","","垮","跨",""]}, // NOR
-    {initial: 9, final: 28, pinyin: "kao", simps: ["","","考","靠",""], trads: ["","","考","靠",""]}, // NOT: execpt archaic
+    {initial: 9, final: 25, pinyin: "kua", simps: ["夸","","垮","跨",""], trads: ["誇","","垮","跨",""]}, // !R
+    {initial: 9, final: 28, pinyin: "kao", simps: ["","","考","靠",""], trads: ["","","考","靠",""]}, // !T: execpt archaic
     {initial: 9, final: 32, pinyin: "kai", simps: ["开","","凯","",""], trads: ["開","","凱","",""]},
-    {initial: 9, final: 33, pinyin: "kuai", simps: ["","","蒯","快",""], trads: ["","","蒯","快",""]}, // NOT
-    {initial: 9, final: 36, pinyin: "kan", simps: ["刊","","砍","看",""], trads: ["刊","","砍","看",""]}, // NOT
+    {initial: 9, final: 33, pinyin: "kuai", simps: ["","","蒯","快",""], trads: ["","","蒯","快",""]}, // !T
+    {initial: 9, final: 36, pinyin: "kan", simps: ["刊","","砍","看",""], trads: ["刊","","砍","看",""]}, // !T
     // {initial: 9, final: 37, pinyin: "kuan", simps: ["","","","",""], trads: ["","","","",""]}, // only surname
-    {initial: 9, final: 40, pinyin: "kang", simps: ["康","扛","","抗",""], trads: ["康","扛","","抗",""]}, // NOT
+    {initial: 9, final: 40, pinyin: "kang", simps: ["康","扛","","抗",""], trads: ["康","扛","","抗",""]}, // !T
     {initial: 9, final: 41, pinyin: "kuang", simps: ["筐","狂","","旷",""], trads: ["筐","狂","","曠",""]},
     {initial: 10, final: 1, pinyin: "bu", simps: ["","","补","不",""], trads: ["","","補","不",""]},
     {initial: 10, final: 2, pinyin: "bi", simps: ["","鼻","比","闭",""], trads: ["","鼻","比","閉",""]},
     {initial: 10, final: 5, pinyin: "bo", simps: ["波","博","","",""], trads: ["波","博","","",""]},
     {initial: 10, final: 6, pinyin: "bie", simps: ["憋","别","瘪","",""], trads: ["憋","別","癟","",""]},
-    {initial: 10, final: 12, pinyin: "bei", simps: ["杯","","北","被","呗"], trads: ["杯","","北","被","唄"]}, // NOT
+    {initial: 10, final: 12, pinyin: "bei", simps: ["杯","","北","被","呗"], trads: ["杯","","北","被","唄"]}, // !T
     {initial: 10, final: 16, pinyin: "ben", simps: ["","","本","",""], trads: ["","","本","",""]},
     {initial: 10, final: 18, pinyin: "bin", simps: ["宾","","","",""], trads: ["賓","","","",""]},
     {initial: 10, final: 20, pinyin: "beng", simps: ["崩","","","迸",""], trads: ["崩","","","",""]},
-    {initial: 10, final: 22, pinyin: "bing", simps: ["兵","","柄","病",""], trads: ["兵","","柄","病",""]}, // NOT
+    {initial: 10, final: 22, pinyin: "bing", simps: ["兵","","柄","病",""], trads: ["兵","","柄","病",""]}, // !T
     {initial: 10, final: 24, pinyin: "ba", simps: ["八","拔","把","爸","吧"], trads: ["八","拔","把","爸","吧"]},
     {initial: 10, final: 28, pinyin: "bao", simps: ["包","","保","报",""], trads: ["包","","保","報",""]},
     {initial: 10, final: 30, pinyin: "biao", simps: ["标","","表","",""], trads: ["標","","表","",""]},
-    {initial: 10, final: 32, pinyin: "bai", simps: ["","白","百","败",""], trads: ["","白","百","敗",""]}, // NOT
+    {initial: 10, final: 32, pinyin: "bai", simps: ["","白","百","败",""], trads: ["","白","百","敗",""]}, // !T
     {initial: 10, final: 36, pinyin: "ban", simps: ["班","","板","办",""], trads: ["班","","板","辦",""]},
     {initial: 10, final: 38, pinyin: "bian", simps: ["边","","扁","变",""], trads: ["邊","","扁","變",""]},
-    {initial: 10, final: 40, pinyin: "bang", simps: ["帮","","绑","棒",""], trads: ["幫","","綁","棒",""]}, // NOT
-    {initial: 11, final: 1, pinyin: "du", simps: ["都","读","堵","度",""], trads: ["都","讀","堵","度",""]}, // NOT
-    {initial: 11, final: 2, pinyin: "di", simps: ["低","敌","底","地",""], trads: ["低","敵","底","地",""]}, // NOT
-    {initial: 11, final: 4, pinyin: "de", simps: ["","得","","","的"], trads: ["","得","","","的"]}, // NOT
-    {initial: 11, final: 5, pinyin: "duo", simps: ["多","夺","躲","惰",""], trads: ["多","奪","躲","惰",""]}, // NOT
-    {initial: 11, final: 6, pinyin: "die", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 8, pinyin: "dou", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 10, pinyin: "diu", simps: ["丢","","","",""], trads: ["丟","","","",""]}, // only one unusual character
-    {initial: 11, final: 13, pinyin: "dui", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 17, pinyin: "dun", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 20, pinyin: "deng", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 21, pinyin: "dong", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 22, pinyin: "ding", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 24, pinyin: "da", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 28, pinyin: "dao", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 30, pinyin: "diao", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 32, pinyin: "dai", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 36, pinyin: "dan", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 37, pinyin: "duan", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 38, pinyin: "dian", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 11, final: 40, pinyin: "dang", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 1, pinyin: "gu", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 4, pinyin: "ge", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 5, pinyin: "guo", simps: ["","国","","",""], trads: ["","國","","",""]},
-    {initial: 14, final: 8, pinyin: "gou", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 12, pinyin: "gei", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 13, pinyin: "gui", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 16, pinyin: "gen", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 17, pinyin: "gun", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 20, pinyin: "geng", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 21, pinyin: "gong", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 24, pinyin: "ga", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 25, pinyin: "gua", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 28, pinyin: "gao", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 32, pinyin: "gai", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 33, pinyin: "guai", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 36, pinyin: "gan", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 37, pinyin: "guan", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 40, pinyin: "gang", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 14, final: 41, pinyin: "guang", simps: ["","","","",""], trads: ["","","","",""]},
-    {initial: 16, final: 0, pinyin: "ci", simps: ["","","","",""], trads: ["","","","",""]},
+    {initial: 10, final: 40, pinyin: "bang", simps: ["帮","","绑","棒",""], trads: ["幫","","綁","棒",""]}, // !T
+    {initial: 11, final: 1, pinyin: "du", simps: ["都","读","堵","度",""], trads: ["都","讀","堵","度",""]}, // !T
+    {initial: 11, final: 2, pinyin: "di", simps: ["低","敌","底","地",""], trads: ["低","敵","底","地",""]}, // !T
+    {initial: 11, final: 4, pinyin: "de", simps: ["","得","","","的"], trads: ["","得","","","的"]}, // !T
+    {initial: 11, final: 5, pinyin: "duo", simps: ["多","夺","躲","惰",""], trads: ["多","奪","躲","惰",""]}, // !T
+    {initial: 11, final: 6, pinyin: "die", simps: ["爹","叠","","",""], trads: ["爹","疊","","",""]}, // !T
+    {initial: 11, final: 8, pinyin: "dou", simps: ["都","","陡","斗",""], trads: ["都","","陡","鬥",""]}, // !T
+    {initial: 11, final: 10, pinyin: "diu", simps: ["丢","","","",""], trads: ["丟","","","",""]}, // !T !R
+    {initial: 11, final: 13, pinyin: "dui", simps: ["堆","","","对",""], trads: ["堆","","","對",""]},
+    {initial: 11, final: 17, pinyin: "dun", simps: ["蹲","","趸","顿",""], trads: ["蹲","","躉","頓",""]},
+    {initial: 11, final: 20, pinyin: "deng", simps: ["灯","","等","邓",""], trads: ["燈","","等","鄧",""]}, // !T
+    {initial: 11, final: 21, pinyin: "dong", simps: ["东","","懂","动",""], trads: ["東","","懂","動",""]},
+    {initial: 11, final: 22, pinyin: "ding", simps: ["丁","","顶","定",""], trads: ["丁","","頂","定",""]}, // !T
+    {initial: 11, final: 24, pinyin: "da", simps: ["搭","答","打","大",""], trads: ["撘","答","打","大",""]}, // !T cf. gēda
+    {initial: 11, final: 28, pinyin: "dao", simps: ["刀","","导","道",""], trads: ["刀","","導","道",""]}, // cf. 道,岛...
+    {initial: 11, final: 30, pinyin: "diao", simps: ["刁","","屌","掉",""], trads: ["刁","","屌","掉",""]}, // !T
+    {initial: 11, final: 32, pinyin: "dai", simps: ["呆","","歹","带",""], trads: ["呆","","歹","帶",""]}, // !T
+    {initial: 11, final: 36, pinyin: "dan", simps: ["单","","掸","但",""], trads: ["單","","撣","但",""]}, // !T
+    {initial: 11, final: 37, pinyin: "duan", simps: ["端","","短","段",""], trads: ["端","","短","段",""]}, // !T
+    {initial: 11, final: 38, pinyin: "dian", simps: ["颠","","点","电",""], trads: ["顛","","點","電",""]},
+    {initial: 11, final: 40, pinyin: "dang", simps: ["当","","党","荡",""], trads: ["當","","黨","蕩",""]}, // !T
+    {initial: 14, final: 1, pinyin: "gu", simps: ["姑","","古","故",""], trads: ["姑","","古","故",""]},
+    {initial: 14, final: 4, pinyin: "ge", simps: ["歌","格","哿","个",""], trads: ["歌","格","哿","個",""]}, // !T
+    {initial: 14, final: 5, pinyin: "guo", simps: ["锅","国","果","过","过"], trads: ["鍋","國","果","過","過"]},
+    {initial: 14, final: 8, pinyin: "gou", simps: ["沟","","狗","够",""], trads: ["溝","","狗","夠",""]},
+    {initial: 14, final: 12, pinyin: "gei", simps: ["","","给","",""], trads: ["","","給","",""]}, // !C
+    {initial: 14, final: 13, pinyin: "gui", simps: ["归","","鬼","贵",""], trads: ["歸","","鬼","貴",""]}, // !T cf. 龟
+    {initial: 14, final: 16, pinyin: "gen", simps: ["根","哏","","亘",""], trads: ["根","哏","","亙",""]},
+    {initial: 14, final: 17, pinyin: "gun", simps: ["","","滚","棍",""], trads: ["","","滾","棍",""]}, // !T
+    {initial: 14, final: 20, pinyin: "geng", simps: ["耕","","耿","更",""], trads: ["耕","","耿","更",""]}, // !T
+    {initial: 14, final: 21, pinyin: "gong", simps: ["工","","","共",""], trads: ["工","","","共",""]}, // !T cf. 公,功,攻,弓,恭
+    {initial: 14, final: 24, pinyin: "ga", simps: ["嘎","噶","","",""], trads: ["嘎","噶","","",""]},
+    {initial: 14, final: 25, pinyin: "gua", simps: ["瓜","","寡","挂",""], trads: ["瓜","","寡","掛",""]}, // !T
+    {initial: 14, final: 28, pinyin: "gao", simps: ["高","","搞","告",""], trads: ["高","","搞","告",""]}, // !T
+    {initial: 14, final: 32, pinyin: "gai", simps: ["该","","改","盖",""], trads: ["該","","改","蓋",""]}, // !T
+    {initial: 14, final: 33, pinyin: "guai", simps: ["乖","","拐","怪",""], trads: ["乖","","拐","怪",""]}, // !T
+    {initial: 14, final: 36, pinyin: "gan", simps: ["甘","","感","干",""], trads: ["甘","","感","幹",""]}, // !T
+    {initial: 14, final: 37, pinyin: "guan", simps: ["关","","管","惯",""], trads: ["關","","管","慣",""]}, // !T cf. 观
+    {initial: 14, final: 40, pinyin: "gang", simps: ["刚","","港","杠",""], trads: ["剛","","港","杠",""]}, // !T
+    {initial: 14, final: 41, pinyin: "guang", simps: ["光","","广","逛",""], trads: ["光","","廣","逛",""]}, // !T
+    {initial: 16, final: 0, pinyin: "ci", simps: ["疵","词","此","次",""], trads: ["庛","詞","此","次",""]}, // !T
     {initial: 16, final: 1, pinyin: "cu", simps: ["","","","",""], trads: ["","","","",""]},
     {initial: 16, final: 4, pinyin: "ce", simps: ["","","","",""], trads: ["","","","",""]},
     {initial: 16, final: 5, pinyin: "cuo", simps: ["","","","",""], trads: ["","","","",""]},
