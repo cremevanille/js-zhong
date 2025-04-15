@@ -1,22 +1,22 @@
 @font-face {
     font-family: "Noto Sans";
     font-style: normal;
-    src: url("/NotoSans.ttf") format("truetype");
+    src: url("/zhong/NotoSans.ttf") format("truetype");
 }
 @font-face {
     font-family: "Noto Sans";
     font-style: italic;
-    src: url("/NotoSansItalic.ttf") format("truetype");
+    src: url("/zhong/NotoSansItalic.ttf") format("truetype");
 }
 @font-face {
     font-family: "Noto Sans SC";
     font-style: normal;
-    src: url("/NotoSansSC.ttf") format("truetype");
+    src: url("/zhong/NotoSansSC.ttf") format("truetype");
 }
 @font-face {
     font-family: "Noto Sans TC";
     font-style: normal;
-    src: url("/NotoSansTC.ttf") format("truetype");
+    src: url("/zhong/NotoSansTC.ttf") format("truetype");
 }
 
 html {
