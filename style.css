@@ -1,3 +1,24 @@
+@font-face {
+    font-family: "Noto Sans";
+    font-style: normal;
+    src: url("/NotoSans.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Noto Sans";
+    font-style: italic;
+    src: url("/NotoSansItalic.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Noto Sans SC";
+    font-style: normal;
+    src: url("/NotoSansSC.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Noto Sans TC";
+    font-style: normal;
+    src: url("/NotoSansTC.ttf") format("truetype");
+}
+
 html {
     --black: #2c0006;
     --grey: #989593;
@@ -11,6 +32,7 @@ html {
 
     font-size: 20px;
     font-family: "Noto Sans", "Noto Sans SC", "Noto Sans TC", sans-serif;
+    font-weight: 400;
 
     &:has(#pin:checked) {
         .pinyin { display: inline; }
@@ -136,12 +158,12 @@ table {
 
         box-sizing: border-box;
     }
-    th { font-weight: bold; }
+    th { font-weight: 600; }
 
     td {
         &:not(:empty, .locked):hover { border: var(--border); }
         &.locked { border: 3px solid var(--red); }
-        &.shadow { font-weight: 300; color: var(--grey); }
+        &.shadow { font-weight: 200; color: var(--grey); }
     }
 
     tbody tr:has(td:not(:empty):hover) th, /* left headers on row hover */

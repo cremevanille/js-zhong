@@ -7,6 +7,7 @@ let initials = document.querySelectorAll("#initials tbody td");
 let finals = document.querySelectorAll("#finals tbody td");
 let specials = document.querySelectorAll("#specials tbody td");
 
+let diatrics = ['\u0304', '\u0301', '\u030C', '\u0300', ''];
 function show(syl) {
     display.innerHTML = "";
     if (!syl) return;
@@ -27,8 +28,11 @@ function show(syl) {
         char.innerText = sc;
         trad.innerText = tc;
 
-        let d = ['\u0304', '\u0301', '\u030C', '\u0300', ''][t];
-        pinyin.innerText = syl.pinyin.replace(/(ch|zh|sh|[mpbfntdczslrqjxkghwy])?(i|u)?([aeiou])(.*)/, (_, i, m, n, c) => (i||"") + (m||"") + n + d + c);
+        let d = diatrics[t];
+        pinyin.innerText = syl.pinyin.replace(
+            /(ch|zh|sh|[mpbfntdczslrqjxkghwy])?(i|u)?([aeiou])(.*)/,
+            (_, i, m, n, c) => (i||"") + (m||"") + n + d + c
+        );
 
         tone.appendChild(char);
         tone.appendChild(trad);
@@ -88,6 +92,7 @@ corner.addEventListener("click", () => {
     while (j<finals.length) finals[j++].classList.add("shadow");
 });
 initials.forEach((cell, i) => {
+    if (!cell.innerHTML) return;
     cell.addEventListener("click", () => {
         search.value = "";
         if (cell.locked) {
@@ -125,6 +130,7 @@ initials.forEach((cell, i) => {
     });
 });
 finals.forEach((cell, f) => {
+    if (!cell.innerHTML) return;
     cell.addEventListener("click", () => {
         search.value = "";
         if (cell.locked) {
