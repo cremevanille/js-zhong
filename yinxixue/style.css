@@ -1,0 +1,242 @@
+html {
+    &:has(#pin:checked) {
+        .pinyin { display: inline; }
+        .ipa { display: none; }
+        .bopomofo { display: none; }
+    }
+    &:has(#ipa:checked) {
+        .pinyin { display: none; }
+        .ipa { display: inline; }
+        .bopomofo { display: none; }
+    }
+    &:has(#bopo:checked) {
+        .pinyin { display: none; }
+        .ipa { display: none; }
+        .bopomofo { display: inline; }
+    }
+
+    &:has(#simp:checked) {
+        font-family: "Noto Sans", "Noto Sans SC", "Noto Sans TC", sans-serif;
+        .simplified { display: inline; }
+        .traditional { display: none; }
+    }
+    &:has(#trad:checked) {
+        font-family: "Noto Sans", "Noto Sans TC", sans-serif;
+        .simplified { display: none; }
+        .traditional { display: inline; }
+    }
+}
+
+header {
+    position: relative;
+    
+    margin: 1em 5em 1em 5em;
+    height: 3em;
+
+    display: grid;
+    place-items: center;
+}
+main {
+    margin: 0 5em 0 5em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.radio {
+    position: absolute;
+
+    &#alphabet { left: 0; }
+    &#character { right: 0; }
+
+    display: flex;
+    flex-direction: row;
+
+    label {
+        display: grid;
+        place-items: center;
+
+        height: 3em;
+        width: 3em;
+
+        &:has(input:checked) {
+            background-color: var(--red);
+            color: var(--white);
+        }
+        input { display: none; }
+    }
+}
+#search {
+    height: 2em;
+    width: 20em;
+
+    font-size: inherit;
+    text-indent: 1em;
+
+    color: inherit; 
+    background-color: inherit;
+    border: var(--border);
+    &:focus {
+        outline: none;
+        border: 3px solid var(--red);
+    }
+}
+#display {
+    height: 4em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2em;
+
+    .tone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .character {
+        font-size: 2em;
+    }
+}
+
+#specials { align-self: flex-start; }
+table {
+    border-spacing: 0;
+    font-size: inherit;
+
+    td, th {
+        text-align: center;
+        vertical-align: middle;
+
+        width: 4.5em;
+        height: 2.5em;
+        &.half-width { width: 2.25em; }
+        &[rowspan="2"] { height: 5em; }
+        &[rowspan="5"] { height: 12.5em; }
+
+        box-sizing: border-box;
+    }
+    th { font-weight: 600; }
+
+    td {
+        &:not(:empty, .locked):hover { border: var(--border); }
+        &.locked { border: 3px solid var(--red); }
+        &.shadow { font-weight: 200; color: var(--grey); }
+    }
+
+    th:hover, /* headers on hover */
+    tbody tr:has(td:not(:empty):hover) th, /* left headers on row hover */
+    &#initials tbody tr:has(th[rowspan="2"]:hover) + tr th:first-child, /* sub-header on next row on sup-header hover */
+    tbody tr:has(+ tr td:not(:empty):hover) th[rowspan="2"], /* sup-header on next row hover */
+    &#initials tr:has(+ tr th:hover) th[rowspan="2"], /* sup-header on next row sub-header hover */
+    tbody th[rowspan="2"]:has(+ th:hover), /* sup-header on sub-header hover */
+    tbody th[rowspan="2"]:hover + th, /* next row sub-header on sup-header hover */
+    &#finals tr:nth-child(2):has(~tr:nth-child(n+3):nth-child(-n+6) td:not(:empty):hover) th:first-child, /* #mid sup-header on next rows hover */
+    &#finals tr:nth-child(7):has(~tr:nth-child(n+8):nth-child(-n+11) td:not(:empty):hover) th:first-child, /* #low sup-header on next rows hover */
+    &:has(thead tr:first-child th:first-child:hover) tbody th:first-child,/* left headers on head hover */
+    thead tr:first-child:has(th:nth-child(2):hover) + tr th,/* top headers on head hover */
+    &:has(thead tr:first-child th:last-child:hover) tbody th:last-child,/* right headers on head hover */
+    &:has(tbody td:not(:empty):nth-of-type(1):hover) thead tr:last-child th:nth-of-type(1), /* top headers on column hover */
+    &:has(td:not(:empty):nth-of-type(2):hover) thead tr:last-child th:nth-of-type(2),
+    &:has(td:not(:empty):nth-of-type(3):hover) thead tr:last-child th:nth-of-type(3),
+    &:has(td:not(:empty):nth-of-type(4):hover) thead th:nth-of-type(4),
+    &:has(td:not(:empty):nth-of-type(5):hover) thead th:nth-of-type(5),
+    tbody:has(tr:first-child th:last-child:hover) tr:nth-child(7) th:last-child, /* next clone row */
+    tbody:has(tr:nth-child(3) th:last-child:hover) tr:nth-child(8) th:last-child, 
+    tbody:has(tr:nth-child(4) th:last-child:hover) tr:nth-child(9) th:last-child,
+    tbody:has(tr:nth-child(5) th:last-child:hover) tr:nth-child(10) th:last-child,
+    tbody:has(tr:nth-child(6) th:last-child:hover) tr:last-child th:last-child,
+    tbody:has(tr:nth-child(7) th:last-child:hover) tr:first-child th:last-child, /* previous clone row */
+    tbody:has(tr:nth-child(8) th:last-child:hover) tr:nth-child(3) th:last-child,
+    tbody:has(tr:nth-child(9) th:last-child:hover) tr:nth-child(4) th:last-child,
+    tbody:has(tr:nth-child(10) th:last-child:hover) tr:nth-child(5) th:last-child,
+    tbody:has(tr:last-child th:last-child:hover) tr:nth-child(6) th:last-child {
+        background-color: var(--red);
+        color: var(--white);
+    }
+
+    /* row on left/right header hover */
+    tbody:has(tr:first-child th:last-child:hover) tr:nth-child(7) td:not(.locked), /* next clone row */
+    tbody:has(tr:nth-child(3) th:last-child:hover) tr:nth-child(8) td:not(.locked), 
+    tbody:has(tr:nth-child(4) th:last-child:hover) tr:nth-child(9) td:not(.locked),
+    tbody:has(tr:nth-child(5) th:last-child:hover) tr:nth-child(10) td:not(.locked),
+    tbody:has(tr:nth-child(6) th:last-child:hover) tr:last-child td:not(.locked),
+    tbody:has(tr:nth-child(8) th:last-child:hover) tr:nth-child(3) td:not(.locked), /* previous clone row */
+    tbody:has(tr:nth-child(9) th:last-child:hover) tr:nth-child(4) td:not(.locked),
+    tbody:has(tr:nth-child(10) th:last-child:hover) tr:nth-child(5) td:not(.locked),
+    tbody:has(tr:last-child th:last-child:hover) tr:nth-child(6) td:not(.locked),
+    tbody tr:has(th:not([rowspan]):hover) td:not(.locked) { /* top/bottom of row */
+        border-top: var(--border);
+        border-bottom: var(--border);
+    }
+    tbody:has(tr:nth-child(7) th:last-child:hover) tr:first-child td:not(.locked), /* previous clone row */
+    tr:has(th[rowspan]:hover) td:not(.locked) { /* top of row group */
+        border-top: var(--border);
+        padding-bottom: var(--padding-compensation);
+    }
+    tbody:has(tr:nth-child(7) th:last-child:hover) tr:nth-child(2) td:not(.locked), /* previous clone row */
+    tr:has(th[rowspan="2"]:hover) + tr td:not(.locked), /* bottom of row group */
+    /* :nth-child(4 of tr:has(th[rowspan="5"]:hover) ~ tr) td:not(.locked) { */
+    &#finals tr:nth-child(2):has(th:first-child:hover) ~ tr:nth-child(6) td:not(.locked), 
+    &#finals tr:nth-child(7):has(th:first-child:hover) ~ tr:last-child td:not(.locked) {
+        border-bottom: var(--border);
+        padding-top: var(--padding-compensation);
+
+    }
+    tbody:has(tr:first-child th:last-child:hover) tr:nth-child(7) td:not(.locked), /* next clone row */
+    tbody:has(tr:nth-child(3) th:last-child:hover) tr:nth-child(8) td:not(.locked), 
+    tbody:has(tr:nth-child(4) th:last-child:hover) tr:nth-child(9) td:not(.locked),
+    tbody:has(tr:nth-child(5) th:last-child:hover) tr:nth-child(10) td:not(.locked),
+    tbody:has(tr:nth-child(6) th:last-child:hover) tr:last-child td:not(.locked),
+    tbody:has(tr:nth-child(7) th:last-child:hover) tr:nth-child(-n+2) td:not(.locked), /* previous clone row */
+    tbody:has(tr:nth-child(8) th:last-child:hover) tr:nth-child(3) td:not(.locked),
+    tbody:has(tr:nth-child(9) th:last-child:hover) tr:nth-child(4) td:not(.locked),
+    tbody:has(tr:nth-child(10) th:last-child:hover) tr:nth-child(5) td:not(.locked),
+    tbody:has(tr:last-child th:last-child:hover) tr:nth-child(6) td:not(.locked),
+    tbody tr:has(th:hover) td:not(.locked), /* left/right of row/row group */
+    tr:has(th[rowspan="2"]:hover) + tr td:not(.locked), /* next row on left header hover */
+    /* :nth-child(-n+4 of tr:has(th[rowspan="5"]:hover) ~ tr) td:not(.locked) {  */
+    &#finals tr:nth-child(2):has(th:first-child:hover) ~ tr:nth-child(n+3):nth-child(-n+6) td:not(.locked), /* four following rows on left header hover */
+    &#finals tr:nth-child(7):has(th:first-child:hover) ~ tr:nth-child(n+8):nth-child(-n+11) td:not(.locked) { /* four following rows on left header hover */
+        &:first-of-type { 
+            border-left: var(--border);
+            padding-right: var(--padding-compensation);
+        }
+        &:last-of-type {
+            border-right: var(--border);
+            padding-left: var(--padding-compensation);
+        }
+    }
+
+    /* column on top header hover */
+    &:has(thead tr:last-child th:nth-of-type(1):hover) tbody tr:first-child td:nth-of-type(1):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(2):hover) tbody tr:first-child td:nth-of-type(2):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(3):hover) tbody tr:first-child td:nth-of-type(3):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(4):hover) tbody tr:first-child td:nth-of-type(4):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(5):hover) tbody tr:first-child td:nth-of-type(5):not(.locked) {
+        border-top: var(--border);
+        padding-bottom: var(--padding-compensation);
+    }
+    &:has(thead tr:last-child th:nth-of-type(1):hover) tbody tr:last-child td:nth-of-type(1):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(2):hover) tbody tr:last-child td:nth-of-type(2):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(3):hover) tbody tr:last-child td:nth-of-type(3):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(4):hover) tbody tr:last-child td:nth-of-type(4):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(5):hover) tbody tr:last-child td:nth-of-type(5):not(.locked) {
+        border-bottom: var(--border);
+        padding-top: var(--padding-compensation);
+    }
+    &:has(thead tr:last-child th:nth-of-type(1):hover) tbody td:nth-of-type(1):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(2):hover) tbody td:nth-of-type(2):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(3):hover) tbody td:nth-of-type(3):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(4):hover) tbody td:nth-of-type(4):not(.locked),
+    &:has(thead tr:last-child th:nth-of-type(5):hover) tbody td:nth-of-type(5):not(.locked) {
+        border-left: var(--border);
+        border-right: var(--border);
+    }
+}
