@@ -19,18 +19,73 @@
     src: url("/zhong/NotoSansTC.ttf") format("truetype");
 }
 
+/* reset */
+a { text-decoration: none; color: inherit; }
+ul, ol { list-style: none; }
+table { border-spacing: 0; }
+
+
 html {
     --black: #2c0006;
     --grey: #989593;
     --white: #faf1ef;
     --red: #b82132;
 
-    background-color: var(--white);
     color: var(--black);
+    background-color: var(--white);
     --border: 2px solid var(--red);
+    --bold-border: 3px solid var(--red);
     --padding-compensation: 3px;
 
     font-size: 20px;
     font-family: "Noto Sans", "Noto Sans SC", "Noto Sans TC", sans-serif;
     font-weight: 400;
+}
+
+body {
+    padding: 1em;
+}
+
+#menu {
+    position: fixed;
+
+    height: 3em;
+    width: 3em;
+
+    display: grid;
+    place-items: center;
+
+    svg {
+        height: 1em;
+        width: 1em;
+
+        fill: var(--red);
+    }
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 100vh;
+    width: 10em;
+    z-index: 1;
+
+    transform: translateX(-10em);
+    transition: transform .3s ease-in-out;
+
+    background-color: var(--white);
+
+    padding-top: 5em;
+    border-right: var(--bold-border);
+    box-sizing: border-box; 
+}
+body:has(#menu:hover, nav:hover) {
+    nav { transform: translateX(0); }
+    main { filter: opacity(.3); }
+}
+
+main {
+    margin: 0 4em 0 4em;
 }

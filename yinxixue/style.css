@@ -30,15 +30,13 @@ html {
 header {
     position: relative;
     
-    margin: 1em 5em 1em 5em;
+    margin-bottom: 1em;
     height: 3em;
 
     display: grid;
     place-items: center;
 }
-main {
-    margin: 0 5em 0 5em;
-
+content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -83,7 +81,7 @@ section {
     border: var(--border);
     &:focus {
         outline: none;
-        border: 3px solid var(--red);
+        border: var(--bold-border);
     }
 }
 #display {
@@ -107,7 +105,6 @@ section {
 
 #specials { align-self: flex-start; }
 table {
-    border-spacing: 0;
     font-size: inherit;
 
     td, th {
@@ -126,7 +123,7 @@ table {
 
     td {
         &:not(:empty, .locked):hover { border: var(--border); }
-        &.locked { border: 3px solid var(--red); }
+        &.locked { border: var(--bold-border); }
         &.shadow { font-weight: 200; color: var(--grey); }
     }
 

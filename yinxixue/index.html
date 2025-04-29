@@ -12,202 +12,217 @@
     <script type="module" src="script.js"></script>
 </head>
 <body>
-    <header>
-        <div id="alphabet" class="radio">
-            <label><input type="radio" name="alphabet" id="pin" checked>拼</label>
-            <label><input type="radio" name="alphabet" id="ipa">音</label>
-            <label><input type="radio" name="alphabet" id="bopo">住</label>
-        </div>
-        <input id="search" type="text" placeholder="pinyin search..."/>
-        <div id="character" class="radio">
-            <label><input type="radio" name="character" id="simp" style="font-family: 'Noto Sans SC'" checked>简</label>
-            <label><input type="radio" name="character" id="trad" style="font-family: 'Noto Sans TC'">繁</label>
-        </div>
-    </header>
+    <div id="menu">
+        <svg viewBox="0 0 10 10">
+            <path d="M 0 0 H 10 v 1 H 0 Z M 0 3 H 10 v 1 H 0 Z M 0 6 H 10 v 1 H 0 Z M 0 9 H 10 v 1 H 0 Z"></path>
+        </svg>
+        <!-- 谱 -->
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/zhong/">home</a></li>
+            <li><a href="/zhong/yinxixue">音系学</a></li>
+            <li><a href="/zhong/hanzi">汉字</a></li>
+        </ul>
+    </nav>
     <main>
-        <section>
-            <table id="initials">
+        <header>
+            <div id="alphabet" class="radio">
+                <label><input type="radio" name="alphabet" id="pin" checked>拼</label>
+                <label><input type="radio" name="alphabet" id="ipa">音</label>
+                <label><input type="radio" name="alphabet" id="bopo">住</label>
+            </div>
+            <input id="search" type="text" placeholder="pinyin search..." />
+            <div id="character" class="radio">
+                <label><input type="radio" name="character" id="simp" style="font-family: 'Noto Sans SC'" checked>简</label>
+                <label><input type="radio" name="character" id="trad" style="font-family: 'Noto Sans TC'">繁</label>
+            </div>
+        </header>
+        <content>
+            <section>
+                <table id="initials">
+                    <thead>
+                        <tr>
+                            <td colspan="2">Ø</td>
+                            <th><span class="simplified">唇</span><span class="traditional">唇</span></th>
+                            <th><span class="simplified">龈</span><span class="traditional">齦</span></th>
+                            <th><span class="simplified">卷舌</span><span class="traditional">卷舌</span></th>
+                            <th><span class="simplified">龈腭</span><span class="traditional">齦齶</span></th>
+                            <th><span class="simplified">软腭</span><span class="traditional">輭齶</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th colspan="2">鼻</th>
+                            <td><span class="pinyin">m</span><span class="ipa">[m]</span><span class="bopomofo">ㄇ</span></td>
+                            <td><span class="pinyin">n</span><span class="ipa">[n]</span><span class="bopomofo">ㄋ</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" class="half-width">塞</th>
+                            <th class="half-width">气</th>
+                            <td><span class="pinyin">p</span><span class="ipa">[pʰ]</span><span class="bopomofo">ㄆ</span></td>
+                            <td><span class="pinyin">t</span><span class="ipa">[tʰ]</span><span class="bopomofo">ㄊ</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="pinyin">k</span><span class="ipa">[kʰ]</span><span class="bopomofo">ㄎ</span></td>
+                        </tr>
+                        <tr>
+                            <th class="half-width">不</th>
+                            <td><span class="pinyin">b</span><span class="ipa">[p]</span><span class="bopomofo">ㄅ</span></td>
+                            <td><span class="pinyin">d</span><span class="ipa">[t]</span><span class="bopomofo">ㄉ</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="pinyin">g</span><span class="ipa">[k]</span><span class="bopomofo">ㄍ</span></td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" class="half-width">塞<br/>擦</th>
+                            <th class="half-width">气</th>
+                            <td></td>
+                            <td><span class="pinyin">c</span><span class="ipa">[ʦʰ]</span><span class="bopomofo">ㄘ</span></td>
+                            <td><span class="pinyin">ch</span><span class="ipa">[ꭧʰ]</span><span class="bopomofo">ㄔ</span></td>
+                            <td><span class="pinyin">q</span><span class="ipa">[ʨʰ]</span><span class="bopomofo">ㄑ</span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th class="half-width">不</th>
+                            <td></td>
+                            <td><span class="pinyin">z</span><span class="ipa">[ʦ]</span><span class="bopomofo">ㄗ</span></td>
+                            <td><span class="pinyin">zh</span><span class="ipa">[ꭧ]</span><span class="bopomofo">ㄓ</span></td>
+                            <td><span class="pinyin">j</span><span class="ipa">[ʨ]</span><span class="bopomofo">ㄐ</span></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">擦</th>
+                            <td><span class="pinyin">f</span><span class="ipa">[f]</span><span class="bopomofo">ㄈ</span></td>
+                            <td><span class="pinyin">s</span><span class="ipa">[s]</span><span class="bopomofo">ㄙ</span></td>
+                            <td><span class="pinyin">sh</span><span class="ipa">[ʂ]</span><span class="bopomofo">ㄕ</span></td>
+                            <td><span class="pinyin">x</span><span class="ipa">[ɕ]</span><span class="bopomofo">ㄒ</span></td>
+                            <td><span class="pinyin">h</span><span class="ipa">[x]</span><span class="bopomofo">ㄏ</span></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">边</th>
+                            <td></td>
+                            <td><span class="pinyin">l</span><span class="ipa">[l]</span><span class="bopomofo">ㄌ</span></td>
+                            <td><span class="pinyin">r</span><span class="ipa">[ʐ]</span><span class="bopomofo">ㄖ</span></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="display"></div>
+            </section>
+            <table id="specials">
                 <thead>
                     <tr>
-                        <td colspan="2">Ø</td>
-                        <th><span class="simplified">唇</span><span class="traditional">唇</span></th>
-                        <th><span class="simplified">龈</span><span class="traditional">齦</span></th>
-                        <th><span class="simplified">卷舌</span><span class="traditional">卷舌</span></th>
-                        <th><span class="simplified">龈腭</span><span class="traditional">齦齶</span></th>
-                        <th><span class="simplified">软腭</span><span class="traditional">輭齶</span></th>
+                        <th><span class="simplified">儿</span><span class="traditional">兒</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th colspan="2">鼻</th>
-                        <td><span class="pinyin">m</span><span class="ipa">[m]</span><span class="bopomofo">ㄇ</span></td>
-                        <td><span class="pinyin">n</span><span class="ipa">[n]</span><span class="bopomofo">ㄋ</span></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th rowspan="2" class="half-width">塞</th>
-                        <th class="half-width">气</th>
-                        <td><span class="pinyin">p</span><span class="ipa">[pʰ]</span><span class="bopomofo">ㄆ</span></td>
-                        <td><span class="pinyin">t</span><span class="ipa">[tʰ]</span><span class="bopomofo">ㄊ</span></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="pinyin">k</span><span class="ipa">[kʰ]</span><span class="bopomofo">ㄎ</span></td>
-                    </tr>
-                    <tr>
-                        <th class="half-width">不</th>
-                        <td><span class="pinyin">b</span><span class="ipa">[p]</span><span class="bopomofo">ㄅ</span></td>
-                        <td><span class="pinyin">d</span><span class="ipa">[t]</span><span class="bopomofo">ㄉ</span></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="pinyin">g</span><span class="ipa">[k]</span><span class="bopomofo">ㄍ</span></td>
-                    </tr>
-                    <tr>
-                        <th rowspan="2" class="half-width">塞<br/>擦</th>
-                        <th class="half-width">气</th>
-                        <td></td>
-                        <td><span class="pinyin">c</span><span class="ipa">[ʦʰ]</span><span class="bopomofo">ㄘ</span></td>
-                        <td><span class="pinyin">ch</span><span class="ipa">[ꭧʰ]</span><span class="bopomofo">ㄔ</span></td>
-                        <td><span class="pinyin">q</span><span class="ipa">[ʨʰ]</span><span class="bopomofo">ㄑ</span></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th class="half-width">不</th>
-                        <td></td>
-                        <td><span class="pinyin">z</span><span class="ipa">[ʦ]</span><span class="bopomofo">ㄗ</span></td>
-                        <td><span class="pinyin">zh</span><span class="ipa">[ꭧ]</span><span class="bopomofo">ㄓ</span></td>
-                        <td><span class="pinyin">j</span><span class="ipa">[ʨ]</span><span class="bopomofo">ㄐ</span></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">擦</th>
-                        <td><span class="pinyin">f</span><span class="ipa">[f]</span><span class="bopomofo">ㄈ</span></td>
-                        <td><span class="pinyin">s</span><span class="ipa">[s]</span><span class="bopomofo">ㄙ</span></td>
-                        <td><span class="pinyin">sh</span><span class="ipa">[ʂ]</span><span class="bopomofo">ㄕ</span></td>
-                        <td><span class="pinyin">x</span><span class="ipa">[ɕ]</span><span class="bopomofo">ㄒ</span></td>
-                        <td><span class="pinyin">h</span><span class="ipa">[x]</span><span class="bopomofo">ㄏ</span></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">边</th>
-                        <td></td>
-                        <td><span class="pinyin">l</span><span class="ipa">[l]</span><span class="bopomofo">ㄌ</span></td>
-                        <td><span class="pinyin">r</span><span class="ipa">[ʐ]</span><span class="bopomofo">ㄖ</span></td>
-                        <td></td>
-                        <td></td>
+                        <td><span class="pinyin">er</span><span class="ipa">[ɚ]</span><span class="bopomofo">ㄦ</span></td>
                     </tr>
                 </tbody>
             </table>
-            <div id="display"></div>
-        </section>
-        <table id="specials">
-            <thead>
-                <tr>
-                    <th><span class="simplified">儿</span><span class="traditional">兒</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="pinyin">er</span><span class="ipa">[ɚ]</span><span class="bopomofo">ㄦ</span></td>
-                </tr>
-            </tbody>
-        </table>
-        <table id="finals">
-            <thead>
-                <tr>
-                    <th rowspan="2"><span class="simplified">核</span><span class="traditional">核</span></th>
-                    <th colspan="4"><span class="simplified">中间</span><span class="traditional">中間</span></th>
-                    <th rowspan="2"><span class="simplified">尾</span><span class="traditional">尾</span></th>
-                </tr>
-                <tr>
-                    <th>Ø</th>
-                    <th>[w]</th>
-                    <th>[j]</th>
-                    <th>[ɥ]</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th><span class="simplified">高</span><span class="traditional">高</span></th>
-                    <td><span class="pinyin">i</span><span class="ipa">[ɨ]</span><span class="bopomofo">ㄭ</span></td>
-                    <td><span class="pinyin">u</span><span class="ipa">[u]</span><span class="bopomofo">ㄨ</span></td>
-                    <td><span class="pinyin">i</span><span class="ipa">[i]</span><span class="bopomofo">ㄧ</span></td>
-                    <td><span class="pinyin">ü</span><span class="ipa">[y]</span><span class="bopomofo">ㄩ</span></td>
-                    <th rowspan="2">Ø</th>
-                </tr>
-                <tr>
-                    <th rowspan="5"><span class="simplified">中</span><span class="traditional">中</span></th>
-                    <td><span class="pinyin">e</span><span class="ipa">[ɤ]</span><span class="bopomofo">ㄜ</span></td>
-                    <td><span class="pinyin">uo</span><span class="ipa">[wo]</span><span class="bopomofo">ㄨㄛ</span></td>
-                    <td><span class="pinyin">ie</span><span class="ipa">[je]</span><span class="bopomofo">ㄧㄝ</span></td>
-                    <td><span class="pinyin">üe</span><span class="ipa">[ɥe]</span><span class="bopomofo">ㄩㄝ</span></td>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">ou</span><span class="ipa">[ou̯]</span><span class="bopomofo">ㄡ</span></td>
-                    <td></td>
-                    <td><span class="pinyin">iu</span><span class="ipa">[jou̯]</span><span class="bopomofo">ㄧㄡ</span></td>
-                    <td></td>
-                    <th>[u]</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">ei</span><span class="ipa">[ei̯]</span><span class="bopomofo">ㄟ</span></td>
-                    <td><span class="pinyin">ui</span><span class="ipa">[wei̯]</span><span class="bopomofo">ㄨㄟ</span></td>
-                    <td></td>
-                    <td></td>
-                    <th>[i]</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">en</span><span class="ipa">[ən]</span><span class="bopomofo">ㄣ</span></td>
-                    <td><span class="pinyin">un</span><span class="ipa">[wən]</span><span class="bopomofo">ㄨㄣ</span></td>
-                    <td><span class="pinyin">in</span><span class="ipa">[in]</span><span class="bopomofo">ㄧㄣ</span></td>
-                    <td><span class="pinyin">ün</span><span class="ipa">[yn]</span><span class="bopomofo">ㄩㄣ</span></td>
-                    <th>[n]</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">eng</span><span class="ipa">[əŋ]</span><span class="bopomofo">ㄥ</span></td>
-                    <td><span class="pinyin">ong</span><span class="ipa">[ʊŋ]</span><span class="bopomofo">ㄨㄥ</span></td>
-                    <td><span class="pinyin">ing</span><span class="ipa">[iŋ]</span><span class="bopomofo">ㄧㄥ</span></td>
-                    <td><span class="pinyin">iong</span><span class="ipa">[jʊŋ]</span><span class="bopomofo">ㄩㄥ</span></td>
-                    <th>[ŋ]</th>
-                </tr>
-                <tr>
-                    <th rowspan="5"><span class="simplified">低</span><span class="traditional">低</span></th>
-                    <td><span class="pinyin">a</span><span class="ipa">[a]</span><span class="bopomofo">ㄚ</span></td>
-                    <td><span class="pinyin">ua</span><span class="ipa">[wa]</span><span class="bopomofo">ㄨㄚ</span></td>
-                    <td><span class="pinyin">ia</span><span class="ipa">[ja]</span><span class="bopomofo">ㄧㄚ</span></td>
-                    <td></td>
-                    <th>Ø</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">ao</span><span class="ipa">[au̯]</span><span class="bopomofo">ㄠ</span></td>
-                    <td></td>
-                    <td><span class="pinyin">iao</span><span class="ipa">[jau̯]</span><span class="bopomofo">ㄧㄠ</span></td>
-                    <td></td>
-                    <th>[u]</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">ai</span><span class="ipa">[ai̯]</span><span class="bopomofo">ㄞ</span></td>
-                    <td><span class="pinyin">uai</span><span class="ipa">[wai̯]</span><span class="bopomofo">ㄨㄞ</span></td>
-                    <td></td>
-                    <td></td>
-                    <th>[i]</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">an</span><span class="ipa">[an]</span><span class="bopomofo">ㄢ</span></td>
-                    <td><span class="pinyin">uan</span><span class="ipa">[wan]</span><span class="bopomofo">ㄨㄢ</span></td>
-                    <td><span class="pinyin">ian</span><span class="ipa">[jɛn]</span><span class="bopomofo">ㄧㄢ</span></td>
-                    <td><span class="pinyin">üan</span><span class="ipa">[ɥɛn]</span><span class="bopomofo">ㄩㄢ</span></td>
-                    <th>[n]</th>
-                </tr>
-                <tr>
-                    <td><span class="pinyin">ang</span><span class="ipa">[aŋ]</span><span class="bopomofo">ㄤ</span></td>
-                    <td><span class="pinyin">uang</span><span class="ipa">[waŋ]</span><span class="bopomofo">ㄨㄤ</span></td>
-                    <td><span class="pinyin">iang</span><span class="ipa">[jaŋ]</span><span class="bopomofo">ㄧㄤ</span></td>
-                    <td></td>
-                    <th>[ŋ]</th>
-                </tr>
-            </tbody>
-        </table>
+            <table id="finals">
+                <thead>
+                    <tr>
+                        <th rowspan="2"><span class="simplified">核</span><span class="traditional">核</span></th>
+                        <th colspan="4"><span class="simplified">中间</span><span class="traditional">中間</span></th>
+                        <th rowspan="2"><span class="simplified">尾</span><span class="traditional">尾</span></th>
+                    </tr>
+                    <tr>
+                        <th>Ø</th>
+                        <th>[w]</th>
+                        <th>[j]</th>
+                        <th>[ɥ]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th><span class="simplified">高</span><span class="traditional">高</span></th>
+                        <td><span class="pinyin">i</span><span class="ipa">[ɨ]</span><span class="bopomofo">ㄭ</span></td>
+                        <td><span class="pinyin">u</span><span class="ipa">[u]</span><span class="bopomofo">ㄨ</span></td>
+                        <td><span class="pinyin">i</span><span class="ipa">[i]</span><span class="bopomofo">ㄧ</span></td>
+                        <td><span class="pinyin">ü</span><span class="ipa">[y]</span><span class="bopomofo">ㄩ</span></td>
+                        <th rowspan="2">Ø</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="5"><span class="simplified">中</span><span class="traditional">中</span></th>
+                        <td><span class="pinyin">e</span><span class="ipa">[ɤ]</span><span class="bopomofo">ㄜ</span></td>
+                        <td><span class="pinyin">uo</span><span class="ipa">[wo]</span><span class="bopomofo">ㄨㄛ</span></td>
+                        <td><span class="pinyin">ie</span><span class="ipa">[je]</span><span class="bopomofo">ㄧㄝ</span></td>
+                        <td><span class="pinyin">üe</span><span class="ipa">[ɥe]</span><span class="bopomofo">ㄩㄝ</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">ou</span><span class="ipa">[ou̯]</span><span class="bopomofo">ㄡ</span></td>
+                        <td></td>
+                        <td><span class="pinyin">iu</span><span class="ipa">[jou̯]</span><span class="bopomofo">ㄧㄡ</span></td>
+                        <td></td>
+                        <th>[u]</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">ei</span><span class="ipa">[ei̯]</span><span class="bopomofo">ㄟ</span></td>
+                        <td><span class="pinyin">ui</span><span class="ipa">[wei̯]</span><span class="bopomofo">ㄨㄟ</span></td>
+                        <td></td>
+                        <td></td>
+                        <th>[i]</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">en</span><span class="ipa">[ən]</span><span class="bopomofo">ㄣ</span></td>
+                        <td><span class="pinyin">un</span><span class="ipa">[wən]</span><span class="bopomofo">ㄨㄣ</span></td>
+                        <td><span class="pinyin">in</span><span class="ipa">[in]</span><span class="bopomofo">ㄧㄣ</span></td>
+                        <td><span class="pinyin">ün</span><span class="ipa">[yn]</span><span class="bopomofo">ㄩㄣ</span></td>
+                        <th>[n]</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">eng</span><span class="ipa">[əŋ]</span><span class="bopomofo">ㄥ</span></td>
+                        <td><span class="pinyin">ong</span><span class="ipa">[ʊŋ]</span><span class="bopomofo">ㄨㄥ</span></td>
+                        <td><span class="pinyin">ing</span><span class="ipa">[iŋ]</span><span class="bopomofo">ㄧㄥ</span></td>
+                        <td><span class="pinyin">iong</span><span class="ipa">[jʊŋ]</span><span class="bopomofo">ㄩㄥ</span></td>
+                        <th>[ŋ]</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="5"><span class="simplified">低</span><span class="traditional">低</span></th>
+                        <td><span class="pinyin">a</span><span class="ipa">[a]</span><span class="bopomofo">ㄚ</span></td>
+                        <td><span class="pinyin">ua</span><span class="ipa">[wa]</span><span class="bopomofo">ㄨㄚ</span></td>
+                        <td><span class="pinyin">ia</span><span class="ipa">[ja]</span><span class="bopomofo">ㄧㄚ</span></td>
+                        <td></td>
+                        <th>Ø</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">ao</span><span class="ipa">[au̯]</span><span class="bopomofo">ㄠ</span></td>
+                        <td></td>
+                        <td><span class="pinyin">iao</span><span class="ipa">[jau̯]</span><span class="bopomofo">ㄧㄠ</span></td>
+                        <td></td>
+                        <th>[u]</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">ai</span><span class="ipa">[ai̯]</span><span class="bopomofo">ㄞ</span></td>
+                        <td><span class="pinyin">uai</span><span class="ipa">[wai̯]</span><span class="bopomofo">ㄨㄞ</span></td>
+                        <td></td>
+                        <td></td>
+                        <th>[i]</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">an</span><span class="ipa">[an]</span><span class="bopomofo">ㄢ</span></td>
+                        <td><span class="pinyin">uan</span><span class="ipa">[wan]</span><span class="bopomofo">ㄨㄢ</span></td>
+                        <td><span class="pinyin">ian</span><span class="ipa">[jɛn]</span><span class="bopomofo">ㄧㄢ</span></td>
+                        <td><span class="pinyin">üan</span><span class="ipa">[ɥɛn]</span><span class="bopomofo">ㄩㄢ</span></td>
+                        <th>[n]</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pinyin">ang</span><span class="ipa">[aŋ]</span><span class="bopomofo">ㄤ</span></td>
+                        <td><span class="pinyin">uang</span><span class="ipa">[waŋ]</span><span class="bopomofo">ㄨㄤ</span></td>
+                        <td><span class="pinyin">iang</span><span class="ipa">[jaŋ]</span><span class="bopomofo">ㄧㄤ</span></td>
+                        <td></td>
+                        <th>[ŋ]</th>
+                    </tr>
+                </tbody>
+            </table>
+        </content>
     </main>
 </body>
 </html>

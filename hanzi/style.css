@@ -1,5 +1,23 @@
+content {
+    display: grid;
+    place-items: center;
+}
+
+
 svg {
-    &:has(path:hover) path:not(:hover) {
-        fill: rgba(0, 0, 0, 0.2);
+    width: 500px;
+    height: 500px;
+
+    &:has(.stroke:hover) #yong {
+        fill: var(--grey);
+    }
+    #yong {
+        fill: var(--black);
+    }
+    .stroke {
+        fill: transparent;
+        &:hover {
+            fill: var(--black);
+        }
     }
 }
