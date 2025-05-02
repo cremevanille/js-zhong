@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf8">
+    <link rel="icon" href="/zhongfavicon.ico" type="image/x-icon">
+    <link rel="preload" href="/zhongNotoSans.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/zhongNotoSansSC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/zhongNotoSansTC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="stylesheet" href="/zhongstyle.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menu">
+        <svg viewBox="0 0 10 10">
+            <path d="M 0 0 H 10 v 1 H 0 Z M 0 3 H 10 v 1 H 0 Z M 0 6 H 10 v 1 H 0 Z M 0 9 H 10 v 1 H 0 Z"></path>
+        </svg>
+        <!-- 谱 -->
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/zhong">home</a></li>
+            <li><a href="/zhongyinxixue">音系学</a></li>
+            <li><a href="/zhonghanzi">汉字</a></li>
+        </ul>
+    </nav>
+    <main>
+        <header>
+            <div id="category">
+                <div id="bihua"><a href="/zhonghanzi/bihua">笔画</a></div>
+                <div id="bushou">部首</div>
+            </div>
+        </header>
+        <content>
+            <input id="search" type="search" placeholder="definition..." />
+            <pre id="data" style="font-size: 50px; span:not(:first-child){ text-indent: 3em; font-size: 20px;}"></pre>
+        </content>
+        <script>
+            const search = document.getElementById("search");
+            const screen = document.getElementById("data");
+            search.addEventListener("keyup", async () => {
+                try {
+                    const res = await fetch("/zhongdictionary.txt");
+                    if (!res.ok) throw new Error("error: " + res.statusText);
+
+                    screen.innerHTML = "";
+                    if (search.value.length < 3) return;
+
+                    const data = await res.text();
+                    const matches = data.matchAll(RegExp('"character":"\([^"]\)","definition":"\([^"]* ' + search.value + '\)"', "g"));
+                    console.log(search.value);
+                    console.log(matches);
+                    for (m of matches) {
+                        const div = document.createElement("DIV");
+                        const char = document.createElement("SPAN");
+                        const def = document.createElement("SPAN");
+                        char.textContent = m[1];
+                        def.textContent = m[2];
+                        div.appendChild(char);
+                        div.appendChild(def);
+                        screen.appendChild(div);
+                    }
+                } catch (error) { console.error(error); }
+            });
+        </script>
+    </main>
+</body>

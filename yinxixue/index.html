@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="utf8">
-    <link rel="icon" href="/zhong/favicon.ico" type="image/x-icon">
-    <link rel="preload" href="/zhong/NotoSans.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="preload" href="/zhong/NotoSansSC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="preload" href="/zhong/NotoSansTC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="stylesheet" href="/zhong/style.css">
+    <link rel="icon" href="/zhongfavicon.ico" type="image/x-icon">
+    <link rel="preload" href="/zhongNotoSans.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/zhongNotoSansSC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/zhongNotoSansTC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="stylesheet" href="/zhongstyle.css">
     <link rel="stylesheet" href="style.css">
     <script type="module" src="dictionary.js"></script>
     <script type="module" src="script.js"></script>
@@ -20,9 +20,9 @@
     </div>
     <nav>
         <ul>
-            <li><a href="/zhong/">home</a></li>
-            <li><a href="/zhong/yinxixue">音系学</a></li>
-            <li><a href="/zhong/hanzi">汉字</a></li>
+            <li><a href="/zhong">home</a></li>
+            <li><a href="/zhongyinxixue">音系学</a></li>
+            <li><a href="/zhonghanzi">汉字</a></li>
         </ul>
     </nav>
     <main>
@@ -32,7 +32,7 @@
                 <label><input type="radio" name="alphabet" id="ipa">音</label>
                 <label><input type="radio" name="alphabet" id="bopo">住</label>
             </div>
-            <input id="search" type="text" placeholder="pinyin search..." />
+            <input id="search" type="search" placeholder="pinyin search..." />
             <div id="character" class="radio">
                 <label><input type="radio" name="character" id="simp" style="font-family: 'Noto Sans SC'" checked>简</label>
                 <label><input type="radio" name="character" id="trad" style="font-family: 'Noto Sans TC'">繁</label>

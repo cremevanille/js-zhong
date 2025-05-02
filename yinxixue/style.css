@@ -27,15 +27,6 @@ html {
     }
 }
 
-header {
-    position: relative;
-    
-    margin-bottom: 1em;
-    height: 3em;
-
-    display: grid;
-    place-items: center;
-}
 content {
     display: flex;
     flex-direction: row;
