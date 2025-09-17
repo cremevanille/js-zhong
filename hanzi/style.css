@@ -1,0 +1,48 @@
+#category {
+    position: absolute;
+    left: 0;
+
+    display: flex;
+    flex-direction: row;
+
+    div {
+        display: grid;
+        place-items: center;
+
+        height: 3rem;
+        width: 3rem;
+    }
+    .active {
+        background-color: var(--red);
+        color: var(--white);
+    }
+}
+
+#display {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    width: 8rem;
+
+    .character {
+        align-self: center;
+
+        width: 5rem;
+        height: 5rem;
+
+        display: grid;
+        place-items: center;
+
+        font-size: 3rem;
+
+        border: var(--border);
+    }
+
+    :is(.meaning, .variants, .pinyin)::before {
+        margin-right: .5rem;
+        font-weight: var(--bold);
+        color: var(--red);
+    }
+    .meaning::before { content: "意"; }
+}

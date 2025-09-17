@@ -1,66 +1,283 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf8">
-    <link rel="icon" href="/zhong/favicon.ico" type="image/x-icon">
-    <link rel="preload" href="/zhong/NotoSans.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="preload" href="/zhong/NotoSansSC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="preload" href="/zhong/NotoSansTC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
-    <link rel="stylesheet" href="/zhong/style.css">
+    <link rel="icon" href="undefined/favicon.ico" type="image/x-icon">
+    <link rel="preload" href="/js-zhong/NotoSans.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/js-zhong/NotoSansSC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="stylesheet" href="/js-zhong/style.css">
+    <link rel="stylesheet" href="/js-zhong/hanzi/style.css">
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="menu">
-        <svg viewBox="0 0 10 10">
-            <path d="M 0 0 H 10 v 1 H 0 Z M 0 3 H 10 v 1 H 0 Z M 0 6 H 10 v 1 H 0 Z M 0 9 H 10 v 1 H 0 Z"></path>
-        </svg>
-        <!-- 谱 -->
+    <script src="script.js" type="module"></script>
+  </head>
+  <body>
+    <div class="icon" id="menu">
+      <svg viewBox="0 0 10 10">
+        <path d="M 0 .5 H 10 M 0 3.5 H 10 M 0 6.5 H 10 M 0 9.5 H 10"></path>
+      </svg>
     </div>
     <nav>
-        <ul>
-            <li><a href="/zhong/">home</a></li>
-            <li><a href="/zhong/yinxixue">音系学</a></li>
-            <li><a href="/zhong/hanzi">汉字</a></li>
-        </ul>
+      <ul>
+        <li><a href="/js-zhong/">home</a></li>
+        <li><a href="/js-zhong/yinxixue">音系学</a></li>
+        <li><a href="/js-zhong/hanzi">汉字</a></li>
+      </ul>
     </nav>
     <main>
-        <header>
-            <div id="category">
-                <div id="bihua"><a href="/zhong/hanzi/bihua">笔画</a></div>
-                <div id="bushou">部首</div>
-            </div>
-        </header>
-        <content>
-            <input id="search" type="search" placeholder="definition..." />
-            <pre id="data" style="font-size: 50px; span:not(:first-child){ text-indent: 3em; font-size: 20px;}"></pre>
-        </content>
-        <script>
-            const search = document.getElementById("search");
-            const screen = document.getElementById("data");
-            search.addEventListener("keyup", async () => {
-                try {
-                    const res = await fetch("/zhong/dictionary.txt");
-                    if (!res.ok) throw new Error("error: " + res.statusText);
-
-                    screen.innerHTML = "";
-                    if (search.value.length < 3) return;
-
-                    const data = await res.text();
-                    const matches = data.matchAll(RegExp('"character":"\([^"]\)","definition":"\([^"]* ' + search.value + '\)"', "g"));
-                    console.log(search.value);
-                    console.log(matches);
-                    for (m of matches) {
-                        const div = document.createElement("DIV");
-                        const char = document.createElement("SPAN");
-                        const def = document.createElement("SPAN");
-                        char.textContent = m[1];
-                        def.textContent = m[2];
-                        div.appendChild(char);
-                        div.appendChild(def);
-                        screen.appendChild(div);
-                    }
-                } catch (error) { console.error(error); }
-            });
-        </script>
+      <header>
+        <div id="category">
+          <div><a href="/js-zhong/hanzi/cihai">辞海</a></div>
+          <div class="active"><a href="/js-zhong/hanzi/bushou">部首</a></div>
+          <div><a href="/js-zhong/hanzi/bihua">笔画</a></div>
+        </div>
+      </header>
+      <content>
+        <div>
+          <div class="options">
+            <label class="icon">
+              <svg viewBox="0 0 10 10">
+                <path d="M 0.5 0.5 h 3.5 v 3.5 h -3.5 Z M 6 0.5 h 3.5 v 3.5 h -3.5 Z M 0.5 6 h 3.5 v 3.5 h -3.5 Z M 6 6 h 3.5 v 3.5 h -3.5 Z"></path>
+              </svg>
+              <input id="grid" type="radio" name="options" checked>
+            </label>
+            <label class="icon">
+              <svg viewBox="0 0 10 10">
+                <path d="M 0 2 h 1 m 2 0 H 10 M 0 5 h 1 m 2 0 H 10 M 0 8 h 1 m 2 0 H 10"></path>
+              </svg>
+              <input id="list" type="radio" name="options">
+            </label>
+          </div>
+          <h2>部首</h2>
+          <div id="radicals">
+            <div id="rad0"><span>一</span><span>yī</span><span>one</span><span></span></div>
+            <div id="rad1"><span>丨</span><span>gǔn</span><span>line</span><span></span></div>
+            <div id="rad2"><span>丶</span><span>zhǔ</span><span>dot</span><span></span></div>
+            <div id="rad3"><span>丿</span><span>piě</span><span>slash</span><span>㇏乀</span></div>
+            <div id="rad4"><span>乙</span><span>yǐ</span><span>second</span><span>乚乛⺄</span></div>
+            <div id="rad5"><span>亅</span><span>jué</span><span>hook</span><span></span></div>
+            <div id="rad6"><span>二</span><span>èr</span><span>two</span><span></span></div>
+            <div id="rad7"><span>亠</span><span>tóu</span><span>lid</span><span></span></div>
+            <div id="rad8"><span>人</span><span>rén</span><span>man</span><span>亻𠆢</span></div>
+            <div id="rad9"><span>儿</span><span>ér</span><span>son, legs</span><span></span></div>
+            <div id="rad10"><span>入</span><span>rù</span><span>enter</span><span></span></div>
+            <div id="rad11"><span>八</span><span>bā</span><span>eight</span><span>丷</span></div>
+            <div id="rad12"><span>冂</span><span>jiōng</span><span>down box</span><span></span></div>
+            <div id="rad13"><span>冖</span><span>mì</span><span>cover</span><span></span></div>
+            <div id="rad14"><span>冫</span><span>bīng</span><span>ice</span><span></span></div>
+            <div id="rad15"><span>几</span><span>jī</span><span>table</span><span></span></div>
+            <div id="rad16"><span>凵</span><span>qū</span><span>open box</span><span></span></div>
+            <div id="rad17"><span>刀</span><span>dāo</span><span>knife</span><span>刂⺈</span></div>
+            <div id="rad18"><span>力</span><span>lì</span><span>power</span><span></span></div>
+            <div id="rad19"><span>勹</span><span>bāo</span><span>wrap</span><span></span></div>
+            <div id="rad20"><span>匕</span><span>bǐ</span><span>spoon</span><span></span></div>
+            <div id="rad21"><span>匚</span><span>fāng</span><span>right open box</span><span></span></div>
+            <div id="rad22"><span>匸</span><span>xǐ</span><span>hiding enclosure</span><span></span></div>
+            <div id="rad23"><span>十</span><span>shí</span><span>ten</span><span></span></div>
+            <div id="rad24"><span>卜</span><span>bǔ</span><span>divination</span><span></span></div>
+            <div id="rad25"><span>卩</span><span>jié</span><span>seal</span><span></span></div>
+            <div id="rad26"><span>厂</span><span>hàn</span><span>cliff</span><span></span></div>
+            <div id="rad27"><span>厶</span><span>sī</span><span>private</span><span></span></div>
+            <div id="rad28"><span>又</span><span>yòu</span><span>again</span><span></span></div>
+            <div id="rad29"><span>口</span><span>kǒu</span><span>mouth</span><span></span></div>
+            <div id="rad30"><span>囗</span><span>wéi</span><span>enclosure</span><span></span></div>
+            <div id="rad31"><span>土</span><span>tǔ</span><span>earth</span><span></span></div>
+            <div id="rad32"><span>士</span><span>shì</span><span>scholar</span><span></span></div>
+            <div id="rad33"><span>夂</span><span>zhǐ</span><span>go</span><span></span></div>
+            <div id="rad34"><span>夊</span><span>suī</span><span>go slowly</span><span></span></div>
+            <div id="rad35"><span>夕</span><span>xī</span><span>evening</span><span></span></div>
+            <div id="rad36"><span>大</span><span>dà</span><span>big</span><span></span></div>
+            <div id="rad37"><span>女</span><span>nǚ</span><span>woman</span><span></span></div>
+            <div id="rad38"><span>子</span><span>zǐ</span><span>child</span><span></span></div>
+            <div id="rad39"><span>宀</span><span>mián</span><span>roof</span><span></span></div>
+            <div id="rad40"><span>寸</span><span>cùn</span><span>inch</span><span></span></div>
+            <div id="rad41"><span>小</span><span>xiǎo</span><span>small</span><span>⺌⺍𭕄</span></div>
+            <div id="rad42"><span>尢</span><span>wāng</span><span>lame</span><span>兀尣</span></div>
+            <div id="rad43"><span>尸</span><span>shī</span><span>corpse</span><span></span></div>
+            <div id="rad44"><span>屮</span><span>chè</span><span>sprout</span><span></span></div>
+            <div id="rad45"><span>山</span><span>shān</span><span>mountain</span><span></span></div>
+            <div id="rad46"><span>川</span><span>chuān</span><span>river</span><span>𡿨巜巛</span></div>
+            <div id="rad47"><span>工</span><span>gōng</span><span>work</span><span></span></div>
+            <div id="rad48"><span>己</span><span>jǐ</span><span>oneself</span><span></span></div>
+            <div id="rad49"><span>巾</span><span>jīn</span><span>towel</span><span></span></div>
+            <div id="rad50"><span>干</span><span>gān</span><span>dry</span><span></span></div>
+            <div id="rad51"><span>幺</span><span>yāo</span><span>short thread</span><span>么</span></div>
+            <div id="rad52"><span>广</span><span>guǎng</span><span>shelter</span><span></span></div>
+            <div id="rad53"><span>廴</span><span>yǐn</span><span>stride</span><span></span></div>
+            <div id="rad54"><span>廾</span><span>gǒng</span><span>two hands</span><span></span></div>
+            <div id="rad55"><span>弋</span><span>yì</span><span>shoot</span><span></span></div>
+            <div id="rad56"><span>弓</span><span>gōng</span><span>bow</span><span></span></div>
+            <div id="rad57"><span>彐</span><span>jì</span><span>snout</span><span>彑⺕</span></div>
+            <div id="rad58"><span>彡</span><span>shān</span><span>bristle</span><span></span></div>
+            <div id="rad59"><span>彳</span><span>chì</span><span>step</span><span></span></div>
+            <div id="rad60"><span>心</span><span>xīn</span><span>heart</span><span>忄㣺⺗</span></div>
+            <div id="rad61"><span>戈</span><span>gē</span><span>halberd</span><span></span></div>
+            <div id="rad62"><span>户</span><span>hù</span><span>door</span><span>戶戸</span></div>
+            <div id="rad63"><span>手</span><span>shǒu</span><span>hand</span><span>扌龵</span></div>
+            <div id="rad64"><span>支</span><span>zhī</span><span>branch</span><span></span></div>
+            <div id="rad65"><span>攴</span><span>pū</span><span>rap</span><span>攵</span></div>
+            <div id="rad66"><span>文</span><span>wén</span><span>script</span><span></span></div>
+            <div id="rad67"><span>斗</span><span>dǒu</span><span>dipper</span><span></span></div>
+            <div id="rad68"><span>斤</span><span>jīn</span><span>axe</span><span></span></div>
+            <div id="rad69"><span>方</span><span>fāng</span><span>square</span><span></span></div>
+            <div id="rad70"><span>无</span><span>wú</span><span>not</span><span>旡</span></div>
+            <div id="rad71"><span>日</span><span>rì</span><span>sun</span><span></span></div>
+            <div id="rad72"><span>曰</span><span>yuē</span><span>say</span><span></span></div>
+            <div id="rad73"><span>月</span><span>yuè</span><span>moon</span><span></span></div>
+            <div id="rad74"><span>木</span><span>mù</span><span>tree</span><span></span></div>
+            <div id="rad75"><span>欠</span><span>qiàn</span><span>lack</span><span></span></div>
+            <div id="rad76"><span>止</span><span>zhǐ</span><span>stop</span><span></span></div>
+            <div id="rad77"><span>歹</span><span>dǎi</span><span>death</span><span>歺</span></div>
+            <div id="rad78"><span>殳</span><span>shū</span><span>weapon</span><span></span></div>
+            <div id="rad79"><span>毋</span><span>wú</span><span>mother</span><span>母</span></div>
+            <div id="rad80"><span>比</span><span>bǐ</span><span>compare</span><span></span></div>
+            <div id="rad81"><span>毛</span><span>máo</span><span>fur</span><span></span></div>
+            <div id="rad82"><span>氏</span><span>shì</span><span>clan</span><span></span></div>
+            <div id="rad83"><span>气</span><span>qì</span><span>steam</span><span></span></div>
+            <div id="rad84"><span>水</span><span>shuǐ</span><span>water</span><span>氵氺</span></div>
+            <div id="rad85"><span>火</span><span>huǒ</span><span>fire</span><span>灬</span></div>
+            <div id="rad86"><span>爪</span><span>zhǎo</span><span>claw</span><span>爫⺤</span></div>
+            <div id="rad87"><span>父</span><span>fù</span><span>father</span><span></span></div>
+            <div id="rad88"><span>爻</span><span>yáo</span><span>double x</span><span></span></div>
+            <div id="rad89"><span>爿</span><span>qiáng</span><span>half tree trunk</span><span>丬</span></div>
+            <div id="rad90"><span>片</span><span>piàn</span><span>slice</span><span></span></div>
+            <div id="rad91"><span>牙</span><span>yá</span><span>fang</span><span></span></div>
+            <div id="rad92"><span>牛</span><span>niú</span><span>cow</span><span>牜⺧𠂒</span></div>
+            <div id="rad93"><span>犬</span><span>quǎn</span><span>dog</span><span>犭</span></div>
+            <div id="rad94"><span>玄</span><span>xuán</span><span>profound</span><span></span></div>
+            <div id="rad95"><span>玉</span><span>yù</span><span>jade</span><span>王玊⺩</span></div>
+            <div id="rad96"><span>瓜</span><span>guā</span><span>melon</span><span></span></div>
+            <div id="rad97"><span>瓦</span><span>wǎ</span><span>tile</span><span></span></div>
+            <div id="rad98"><span>甘</span><span>gān</span><span>sweet</span><span></span></div>
+            <div id="rad99"><span>生</span><span>shēng</span><span>life</span><span></span></div>
+            <div id="rad100"><span>用</span><span>yòng</span><span>use</span><span></span></div>
+            <div id="rad101"><span>田</span><span>tián</span><span>field</span><span></span></div>
+            <div id="rad102"><span>疋</span><span>pǐ</span><span>cloth</span><span>𤴓𤴔</span></div>
+            <div id="rad103"><span>疒</span><span>nè</span><span>sickness</span><span></span></div>
+            <div id="rad104"><span>癶</span><span>bō</span><span>steps</span><span></span></div>
+            <div id="rad105"><span>白</span><span>bái</span><span>white</span><span></span></div>
+            <div id="rad106"><span>皮</span><span>pí</span><span>skin</span><span></span></div>
+            <div id="rad107"><span>皿</span><span>mǐn</span><span>dish</span><span></span></div>
+            <div id="rad108"><span>目</span><span>mù</span><span>eye</span><span>⺫</span></div>
+            <div id="rad109"><span>矛</span><span>máo</span><span>spear</span><span></span></div>
+            <div id="rad110"><span>矢</span><span>shǐ</span><span>arrow</span><span></span></div>
+            <div id="rad111"><span>石</span><span>shí</span><span>stone</span><span></span></div>
+            <div id="rad112"><span>示</span><span>shì</span><span>spirit</span><span>礻</span></div>
+            <div id="rad113"><span>禸</span><span>róu</span><span>track</span><span></span></div>
+            <div id="rad114"><span>禾</span><span>hé</span><span>grain</span><span></span></div>
+            <div id="rad115"><span>穴</span><span>xué</span><span>cave</span><span></span></div>
+            <div id="rad116"><span>立</span><span>lì</span><span>stand</span><span></span></div>
+            <div id="rad117"><span>竹</span><span>zhú</span><span>bamboo</span><span>𥫗⺮</span></div>
+            <div id="rad118"><span>米</span><span>mǐ</span><span>rice</span><span></span></div>
+            <div id="rad119"><span>糸</span><span>mì</span><span>silk</span><span>纟</span></div>
+            <div id="rad120"><span>缶</span><span>fǒu</span><span>jar</span><span></span></div>
+            <div id="rad121"><span>网</span><span>wǎng</span><span>net</span><span>⺳罓罒</span></div>
+            <div id="rad122"><span>羊</span><span>yáng</span><span>sheep</span><span>⺶𦍌</span></div>
+            <div id="rad123"><span>羽</span><span>yǔ</span><span>feather</span><span></span></div>
+            <div id="rad124"><span>老</span><span>lǎo</span><span>old</span><span>耂</span></div>
+            <div id="rad125"><span>而</span><span>ér</span><span>and</span><span></span></div>
+            <div id="rad126"><span>耒</span><span>lěi</span><span>plow</span><span></span></div>
+            <div id="rad127"><span>耳</span><span>ěr</span><span>ear</span><span></span></div>
+            <div id="rad128"><span>聿</span><span>yù</span><span>brush</span><span>⺻肀</span></div>
+            <div id="rad129"><span>肉</span><span>ròu</span><span>meat</span><span>⺼</span></div>
+            <div id="rad130"><span>臣</span><span>chén</span><span>minister</span><span></span></div>
+            <div id="rad131"><span>自</span><span>zì</span><span>self</span><span></span></div>
+            <div id="rad132"><span>至</span><span>zhì</span><span>arrive</span><span></span></div>
+            <div id="rad133"><span>臼</span><span>jiù</span><span>mortar</span><span></span></div>
+            <div id="rad134"><span>舌</span><span>shé</span><span>tongue</span><span></span></div>
+            <div id="rad135"><span>舛</span><span>chuǎn</span><span>oppose</span><span></span></div>
+            <div id="rad136"><span>舟</span><span>zhōu</span><span>boat</span><span></span></div>
+            <div id="rad137"><span>艮</span><span>gēn</span><span>stopping</span><span></span></div>
+            <div id="rad138"><span>色</span><span>sè</span><span>color</span><span></span></div>
+            <div id="rad139"><span>艸</span><span>cǎo</span><span>grass</span><span>艹䒑</span></div>
+            <div id="rad140"><span>虍</span><span>hū</span><span>tiger</span><span></span></div>
+            <div id="rad141"><span>虫</span><span>huǐ</span><span>insect</span><span></span></div>
+            <div id="rad142"><span>血</span><span>xuè</span><span>blood</span><span></span></div>
+            <div id="rad143"><span>行</span><span>xíng</span><span>intersection</span><span></span></div>
+            <div id="rad144"><span>衣</span><span>yī</span><span>clothes</span><span>衤𧘇</span></div>
+            <div id="rad145"><span>西</span><span>xī</span><span>west</span><span>覀</span></div>
+            <div id="rad146"><span>见</span><span>jiàn</span><span>see</span><span></span></div>
+            <div id="rad147"><span>角</span><span>jiǎo</span><span>horn</span><span></span></div>
+            <div id="rad148"><span>言</span><span>yán</span><span>speech</span><span>讠</span></div>
+            <div id="rad149"><span>谷</span><span>gǔ</span><span>valley</span><span></span></div>
+            <div id="rad150"><span>豆</span><span>dòu</span><span>bean</span><span></span></div>
+            <div id="rad151"><span>豕</span><span>shǐ</span><span>pig</span><span></span></div>
+            <div id="rad152"><span>豸</span><span>zhì</span><span>badger</span><span></span></div>
+            <div id="rad153"><span>贝</span><span>bèi</span><span>shell</span><span></span></div>
+            <div id="rad154"><span>赤</span><span>chì</span><span>red</span><span></span></div>
+            <div id="rad155"><span>走</span><span>zǒu</span><span>run</span><span></span></div>
+            <div id="rad156"><span>足</span><span>zú</span><span>foot</span><span>𧾷</span></div>
+            <div id="rad157"><span>身</span><span>shēn</span><span>body</span><span></span></div>
+            <div id="rad158"><span>车</span><span>chē</span><span>cart</span><span></span></div>
+            <div id="rad159"><span>辛</span><span>xīn</span><span>bitter</span><span></span></div>
+            <div id="rad160"><span>辰</span><span>chén</span><span>morning</span><span></span></div>
+            <div id="rad161"><span>辵</span><span>chuò</span><span>walk</span><span>辶</span></div>
+            <div id="rad162"><span>邑</span><span>yì</span><span>city</span><span>阝</span></div>
+            <div id="rad163"><span>酉</span><span>yǒu</span><span>wine</span><span></span></div>
+            <div id="rad164"><span>釆</span><span>biàn</span><span>distinguish</span><span></span></div>
+            <div id="rad165"><span>里</span><span>lǐ</span><span>village</span><span></span></div>
+            <div id="rad166"><span>金</span><span>jīn</span><span>gold</span><span>钅</span></div>
+            <div id="rad167"><span>长</span><span>cháng</span><span>long</span><span>镸</span></div>
+            <div id="rad168"><span>门</span><span>mén</span><span>gate</span><span></span></div>
+            <div id="rad169"><span>阜</span><span>fù</span><span>mound</span><span>阝</span></div>
+            <div id="rad170"><span>隶</span><span>lì</span><span>slave</span><span></span></div>
+            <div id="rad171"><span>隹</span><span>zhuī</span><span>short-tailed bird</span><span></span></div>
+            <div id="rad172"><span>雨</span><span>yǔ</span><span>rain</span><span></span></div>
+            <div id="rad173"><span>青</span><span>qīng</span><span>blue</span><span></span></div>
+            <div id="rad174"><span>非</span><span>fēi</span><span>wrong</span><span></span></div>
+            <div id="rad175"><span>面</span><span>miàn</span><span>face</span><span></span></div>
+            <div id="rad176"><span>革</span><span>gé</span><span>leather</span><span></span></div>
+            <div id="rad177"><span>韦</span><span>wéi</span><span>tanned leather</span><span></span></div>
+            <div id="rad178"><span>韭</span><span>jiǔ</span><span>leek</span><span></span></div>
+            <div id="rad179"><span>音</span><span>yīn</span><span>sound</span><span></span></div>
+            <div id="rad180"><span>页</span><span>yè</span><span>page</span><span></span></div>
+            <div id="rad181"><span>风</span><span>fēng</span><span>wind</span><span></span></div>
+            <div id="rad182"><span>飞</span><span>fēi</span><span>fly</span><span></span></div>
+            <div id="rad183"><span>食</span><span>shí</span><span>eat</span><span>饣</span></div>
+            <div id="rad184"><span>首</span><span>shǒu</span><span>head</span><span></span></div>
+            <div id="rad185"><span>香</span><span>xiāng</span><span>fragrant</span><span></span></div>
+            <div id="rad186"><span>马</span><span>mǎ</span><span>horse</span><span></span></div>
+            <div id="rad187"><span>骨</span><span>gǔ</span><span>bone</span><span></span></div>
+            <div id="rad188"><span>高</span><span>gāo</span><span>tall</span><span></span></div>
+            <div id="rad189"><span>髟</span><span>biāo</span><span>hair</span><span></span></div>
+            <div id="rad190"><span>鬥</span><span>dòu</span><span>fight</span><span></span></div>
+            <div id="rad191"><span>鬯</span><span>chàng</span><span>sacrificial</span><span></span></div>
+            <div id="rad192"><span>鬲</span><span>lì</span><span>cauldron</span><span></span></div>
+            <div id="rad193"><span>鬼</span><span>guǐ</span><span>ghost</span><span></span></div>
+            <div id="rad194"><span>鱼</span><span>yú</span><span>fish</span><span></span></div>
+            <div id="rad195"><span>鸟</span><span>niǎo</span><span>bird</span><span></span></div>
+            <div id="rad196"><span>卤</span><span>lǔ</span><span>salt</span><span></span></div>
+            <div id="rad197"><span>鹿</span><span>lù</span><span>deer</span><span></span></div>
+            <div id="rad198"><span>麦</span><span>mài</span><span>wheat</span><span></span></div>
+            <div id="rad199"><span>麻</span><span>má</span><span>hemp</span><span></span></div>
+            <div id="rad200"><span>黄</span><span>huáng</span><span>yellow</span><span></span></div>
+            <div id="rad201"><span>黍</span><span>shǔ</span><span>millet</span><span></span></div>
+            <div id="rad202"><span>黑</span><span>hēi</span><span>black</span><span></span></div>
+            <div id="rad203"><span>黹</span><span>zhǐ</span><span>embroidery</span><span></span></div>
+            <div id="rad204"><span>黾</span><span>mǐn</span><span>frog</span><span></span></div>
+            <div id="rad205"><span>鼎</span><span>dǐng</span><span>tripod</span><span></span></div>
+            <div id="rad206"><span>鼓</span><span>gǔ</span><span>drum</span><span></span></div>
+            <div id="rad207"><span>鼠</span><span>shǔ</span><span>rat</span><span></span></div>
+            <div id="rad208"><span>鼻</span><span>bí</span><span>nose</span><span></span></div>
+            <div id="rad209"><span>齐</span><span>qí</span><span>even</span><span>斉</span></div>
+            <div id="rad210"><span>齿</span><span>chǐ</span><span>tooth</span><span></span></div>
+            <div id="rad211"><span>龙</span><span>lóng</span><span>dragon</span><span>竜</span></div>
+            <div id="rad212"><span>龟</span><span>guī</span><span>turtle</span><span></span></div>
+            <div id="rad213"><span>龠</span><span>yuè</span><span>flute</span><span></span></div>
+          </div>
+        </div>
+        <div>
+          <h2>信息</h2>
+          <div id="display">
+            <div class="character"></div>
+            <div class="variants"></div>
+            <div class="meaning"></div>
+          </div>
+        </div>
+        <div>
+          <h2>汉子</h2>
+          <div id="characters"></div>
+        </div>
+      </content>
     </main>
-</body>
+  </body>
+</html>

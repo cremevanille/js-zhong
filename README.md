@@ -1,0 +1,3 @@
+# Zhong!
+
+using vanilla javascript

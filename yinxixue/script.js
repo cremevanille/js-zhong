@@ -1,43 +1,44 @@
-import { dictionary } from "./dictionary.js";
+import { syllabary } from "./syllabary.js"
 
-let search = document.getElementById("search");
-let display = document.getElementById("display");
-let corner = document.querySelector("#initials td");
-let initials = document.querySelectorAll("#initials tbody td");
-let finals = document.querySelectorAll("#finals tbody td");
-let specials = document.querySelectorAll("#specials tbody td");
+syllabary.finals = (i) => syllabary.reduce((acc,syl) => syl.initial == i ? acc.concat(syl.final) : acc, []);
+syllabary.initials = (f) => syllabary.reduce((acc,syl) => syl.final == f && syl.initial != -1 ? acc.concat(syl.initial) : acc, []);
 
-let diatrics = ['\u0304', '\u0301', '\u030C', '\u0300', ''];
+const search = document.getElementById("search");
+const display = document.querySelector("#tones .cells");
+const corner = document.querySelector("#initials .cell");
+const initials = document.querySelectorAll("#initials .row .cell");
+const finals = document.querySelectorAll("#finals .cell");
+const specials = document.querySelectorAll("#specials .cell");
+
+const diatrics = ['\u0304', '\u0301', '\u030C', '\u0300', ''];
 function show(syl) {
     display.innerHTML = "";
     if (!syl) return;
     for (let t=0; t<5; t++) {
-        let sc = syl.simps[t];
-        let tc = syl.trads[t];
-        if (!sc) continue;
-        let tone = document.createElement("DIV");
-        let char = document.createElement("SPAN");
-        let trad = document.createElement("SPAN");
-        let pinyin = document.createElement("SPAN");
+        const scs = syl.characters[t];
+        if (!scs.length) {
+            const tone = display.appendChild(document.createElement("RUBY"));
+            tone.appendChild(document.createElement("RT"));
+            continue;
+        }
 
-        tone.className = "tone";
-        char.className = "character simplified";
-        trad.className = "character traditional";
-        // pinyin.className = "pinyin";
+        const tone = display.appendChild(document.createElement("DIV"));
 
-        char.innerText = sc;
-        trad.innerText = tc;
+        const char = tone.appendChild(document.createElement("SPAN"));
+        let scit = 0;
+        char.innerText = scs[scit];
+        char.addEventListener("click", () => {
+            navigator.clipboard.writeText(scs[scit]);
+            if (++scit == scs.length) scit = 0;
+            char.innerText = scs[scit];
+            // tone.childNodes[0].nodeValue = scs[scit];
+        })
 
-        let d = diatrics[t];
+        const pinyin = tone.appendChild(document.createElement("SPAN"));
         pinyin.innerText = syl.pinyin.replace(
             /(ch|zh|sh|[mpbfntdczslrqjxkghwy])?(i|u)?([aeiou])(.*)/,
-            (_, i, m, n, c) => (i||"") + (m||"") + n + d + c
+            (_, i, m, n, c) => (i||"") + (m||"") + n + diatrics[t] + c
         );
-
-        tone.appendChild(char);
-        tone.appendChild(trad);
-        tone.appendChild(pinyin);
-        display.appendChild(tone);
     }
 }
 
@@ -55,6 +56,15 @@ function lock(table, cell, id) {
     cell.classList.add("locked");
 }
 
+function shadow(table, execptions=[]) {
+    let j = 0;
+    execptions.forEach(f => {
+        while (j<f) table[j++].classList.add("shadow");
+        table[j++].classList.remove("shadow");
+    });
+    while (j<table.length) table[j++].classList.add("shadow");
+}
+
 corner.addEventListener("click", () => {
     search.value = "";
     if (corner.locked) {
@@ -70,7 +80,7 @@ corner.addEventListener("click", () => {
 
     let syl = undefined;
     if (finals.locked) {
-        syl = dictionary.find(s => {
+        syl = syllabary.find(s => {
             if (s.initial != -1) return false;
             return s.final == finals.locked.id;
         });
@@ -83,13 +93,7 @@ corner.addEventListener("click", () => {
 
     lock(initials, corner, -1);
     show(syl);
-
-    let j = 0;
-    dictionary.n2f.forEach(f => {
-        while (j<f) finals[j++].classList.add("shadow");
-        finals[j++].classList.remove("shadow");
-    });
-    while (j<finals.length) finals[j++].classList.add("shadow");
+    shadow(finals, syllabary.finals(-1));
 });
 initials.forEach((cell, i) => {
     if (!cell.innerHTML) return;
@@ -99,6 +103,7 @@ initials.forEach((cell, i) => {
             show(null);
             unlock(initials);
             finals.forEach(fin => fin.classList.remove("shadow"));
+            specials.forEach(spe => spe.classList.remove("shadow"));
             return;
         }
 
@@ -107,7 +112,7 @@ initials.forEach((cell, i) => {
 
         let syl = undefined;
         if (finals.locked) {
-            syl = dictionary.find(s => {
+            syl = syllabary.find(s => {
                 if (s.initial != i) return false;
                 return s.final == finals.locked.id;
             });
@@ -121,12 +126,7 @@ initials.forEach((cell, i) => {
         lock(initials, cell, i);
         show(syl);
 
-        let j = 0;
-        dictionary.i2f[i].forEach(f => {
-            while (j<f) finals[j++].classList.add("shadow");
-            finals[j++].classList.remove("shadow");
-        });
-        while (j<finals.length) finals[j++].classList.add("shadow");
+        shadow(finals, syllabary.finals(i));
     });
 });
 finals.forEach((cell, f) => {
@@ -145,17 +145,17 @@ finals.forEach((cell, f) => {
 
         let syl = undefined;
         if (initials.locked) {
-            syl = dictionary.find(s => {
+            syl = syllabary.find(s => {
                 if (s.final != f) return false;
                 return s.initial == initials.locked.id;
             });
             if (syl) {
-                if (dictionary.n2f.includes(f)) corner.classList.remove("shadow");
+                if (syllabary.finals(-1).includes(f)) corner.classList.remove("shadow");
                 else corner.classList.add("shadow");
             }
         }
         if (!syl) {
-            syl = dictionary.find(s => {
+            syl = syllabary.find(s => {
                 if (s.final != f) return false;
                 return s.initial == -1;
             });
@@ -163,12 +163,7 @@ finals.forEach((cell, f) => {
                 lock(initials, corner, -1);
                 corner.classList.remove("shadow");
 
-                let j = 0;
-                dictionary.n2f.forEach(f => {
-                    while (j<f) finals[j++].classList.add("shadow");
-                    finals[j++].classList.remove("shadow");
-                });
-                while (j<finals.length) finals[j++].classList.add("shadow");
+                shadow(finals, syllabary.finals(-1));
             } else {
                 unlock(initials);
                 finals.forEach(fin => fin.classList.remove("shadow"));
@@ -179,12 +174,7 @@ finals.forEach((cell, f) => {
         lock(finals, cell, f);
         show(syl);
 
-        let j = 0;
-        dictionary.f2i[f].forEach(i => {
-            while (j<i) initials[j++].classList.add("shadow");
-            initials[j++].classList.remove("shadow");
-        });
-        while (j<initials.length) initials[j++].classList.add("shadow");
+        shadow(initials, syllabary.initials(f));
     });
 });
 specials.forEach((cell, s) => {
@@ -205,16 +195,11 @@ specials.forEach((cell, s) => {
         corner.classList.remove("shadow");
         initials.forEach(ini => ini.classList.add("shadow"));
 
-        let j = 0;
-        dictionary.n2f.forEach(f => {
-            while (j<f) finals[j++].classList.add("shadow");
-            finals[j++].classList.remove("shadow");
-        });
-        while (j<finals.length) finals[j++].classList.add("shadow");
+        shadow(finals, syllabary.finals(-1));
 
         specials.forEach(spe => spe.classList.remove("shadow"));
 
-        show(dictionary.find(syl => syl.final == -s-1))
+        show(syllabary.find(syl => syl.final == -s-1))
     });
 });
 
@@ -231,7 +216,7 @@ search.addEventListener("keyup", () => {
         return;
     }
 
-    let syl = dictionary.find(s => s.pinyin == search.value);
+    const syl = syllabary.find(s => s.pinyin == search.value);
     if (!syl) {
         show(null);
         unlock(initials);
@@ -254,35 +239,17 @@ search.addEventListener("keyup", () => {
     unlock(specials);
     if (syl.initial == -1) {
         lock(initials, corner, -1);
-
-        let j = 0;
-        dictionary.n2f.forEach(f => {
-            while (j<f) finals[j++].classList.add("shadow");
-            finals[j++].classList.remove("shadow");
-        });
-        while (j<finals.length) finals[j++].classList.add("shadow");
+        shadow(finals, syllabary.finals(-1));
     }
     else {
         lock(initials, initials[syl.initial], syl.initial);
-
-        let j = 0;
-        dictionary.i2f[syl.initial].forEach(f => {
-            while (j<f) finals[j++].classList.add("shadow");
-            finals[j++].classList.remove("shadow");
-        });
-        while (j<finals.length) finals[j++].classList.add("shadow");
-
+        shadow(finals, syllabary.finals(syl.initial));
         specials.forEach(spe => spe.classList.add("shadow"));
     }
 
     lock(finals, finals[syl.final], syl.final);
 
-    let j = 0;
-    dictionary.f2i[syl.final].forEach(i => {
-        while (j<i) initials[j++].classList.add("shadow");
-        initials[j++].classList.remove("shadow");
-    });
-    while (j<initials.length) initials[j++].classList.add("shadow");
-    if (dictionary.n2f.includes(syl.final)) corner.classList.remove("shadow");
+    shadow(initials, syllabary.initials(syl.final));
+    if (syllabary.finals(-1).includes(syl.final)) corner.classList.remove("shadow");
     else corner.classList.add("shadow");
 });

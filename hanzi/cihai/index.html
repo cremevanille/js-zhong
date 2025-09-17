@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <link rel="icon" href="undefined/favicon.ico" type="image/x-icon">
+    <link rel="preload" href="/js-zhong/NotoSans.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="preload" href="/js-zhong/NotoSansSC.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+    <link rel="stylesheet" href="/js-zhong/style.css">
+    <link rel="stylesheet" href="/js-zhong/hanzi/style.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" type="module"></script>
+    <script src="/js-zhong//unpkg.com/alpinejs" defer></script>
+  </head>
+  <body>
+    <div class="icon" id="menu">
+      <svg viewBox="0 0 10 10">
+        <path d="M 0 .5 H 10 M 0 3.5 H 10 M 0 6.5 H 10 M 0 9.5 H 10"></path>
+      </svg>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/js-zhong/">home</a></li>
+        <li><a href="/js-zhong/yinxixue">音系学</a></li>
+        <li><a href="/js-zhong/hanzi">汉字</a></li>
+      </ul>
+    </nav>
+    <main>
+      <header>
+        <div id="category">
+          <div class="active"><a href="/js-zhong/hanzi/cihai">辞海</a></div>
+          <div><a href="/js-zhong/hanzi/bushou">部首</a></div>
+          <div><a href="/js-zhong/hanzi/bihua">笔画</a></div>
+        </div>
+        <div id="center" x-data>
+          <input id="search" type="search" placeholder="definition..." x-model="$store.search.input" x-on:keyup="
+                $store.search.ongoing = $store.search.input.length &gt;= 2;
+                if ($store.search.ongoing) {
+                    $store.search.characters = $store.dictionary.filter(
+                        entry =&gt; entry.definition?.search(RegExp(&quot;(^| )&quot;+$store.search.input)) &gt;= 0
+                    )
+                }
+            "><span id="count" x-text="$store.search.ongoing ? $store.search.characters.length : ''"></span>
+        </div>
+      </header>
+      <content x-data="{ target: null }">
+        <div x-data="{
+                grid: &quot;grid&quot;,
+                get len() {
+                    return this.grid == &quot;grid&quot;
+                        ? { margin: 50, visible: 100, row_height: 3, row: 10 }
+                        : { margin: 10, visible: 15, row_height: 2, row: 1 };
+                }
+            }">
+          <div class="options">
+            <label class="icon">
+              <svg viewBox="0 0 10 10">
+                <path d="M 0.5 0.5 h 3.5 v 3.5 h -3.5 Z M 6 0.5 h 3.5 v 3.5 h -3.5 Z M 0.5 6 h 3.5 v 3.5 h -3.5 Z M 6 6 h 3.5 v 3.5 h -3.5 Z"></path>
+              </svg>
+              <input id="grid" type="radio" name="options" checked x-model="grid" value="grid">
+            </label>
+            <label class="icon">
+              <svg viewBox="0 0 10 10">
+                <path d="M 0 2 h 1 m 2 0 H 10 M 0 5 h 1 m 2 0 H 10 M 0 8 h 1 m 2 0 H 10"></path>
+              </svg>
+              <input id="list" type="radio" name="options" x-model="grid" value="list">
+            </label>
+          </div>
+          <h2 x-text="Math.floor(
+                        ($store.search.ongoing
+                            ? $store.search.characters.length
+                            : 7000
+                        + 1) / len.row
+                    ) * len.row_height">汉子</h2>
+          <div id="characters" x-data="{
+                    scroll: 0,
+                    get first() {
+                        const scroll_char = len.row * Math.floor(this.scroll / (len.row_height * $store.rem)); 
+                        const scroll_block = Math.floor(scroll_char / len.margin) * len.margin;
+                        if (scroll_block &lt; len.margin)
+                            return 0;    
+                        if (scroll_block &gt;= 7000-len.visible-len.margin)
+                            return 7000-len.visible-3*len.margin;
+                        return scroll_block - len.margin;
+                    }
+                }" x-init="
+                    if (window.location.search) {
+                        const char_id = parseInt(window.location.search.slice(1))
+                        $el.scrollTo({top: char_id &gt; 4*len.row ? (char_id/len.row - 3)*len.row_height*$store.rem : 0 });
+                        target = $store.dictionary[char_id];
+                    } else {
+                        $el.scrollTo({ top: parseInt(localStorage.getItem(&quot;cihai-y&quot;) || 0) });
+                    }
+                    $watch('$store.search.ongoing', ongoing =&gt; {
+                        if (ongoing) {
+                            $el.scrollTo({ top: 0 });
+                            scroll = 0;
+                        }
+                    });
+                " x-on:scroll="
+                    if (!$store.search.ongoing)
+                        scroll = $el.scrollTop;
+                " x-on:click="
+                    target = $store.dictionary[
+                        parseInt(
+                            ($event.target.tagName == &quot;SPAN&quot;
+                                ? $event.target.parentElement
+                                : $event.target
+                            ).id.slice(4)
+                        )
+                    ];
+                ">
+            <div id="fullspace" x-bind:style="{ height: $store.search.ongoing ? 'fit-content' : 7000/len.row*len.row_height + 'rem' }">
+              <div id="midspace" x-data="{
+                            get characters() {
+                                return $store.search.ongoing
+                                    ? $store.search.characters
+                                    : $store.dictionary.slice(first, first + len.visible + 2*len.margin);
+                            }
+                        }" x-bind:style="{ transform: `translateY(${first/len.row*len.row_height}rem)` }">
+                <template x-for="entry in characters">
+                  <div x-bind:id="`char${entry.id}`" x-bind:class="entry === target &amp;&amp; 'locked'"><span x-text="entry.character"></span><span x-text="entry.pinyin"></span><span x-text="entry.definition"></span></div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2>信息</h2>
+          <div id="display">
+            <div class="character" x-text="target?.character"></div>
+            <div class="pinyin" x-text="target?.pinyin"></div>
+            <div class="meaning" x-text="target?.definition"></div>
+          </div>
+        </div>
+      </content>
+    </main>
+  </body>
+</html>

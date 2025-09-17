@@ -1,0 +1,137 @@
+content {
+    display: flex;
+    justify-content: space-between;
+}
+
+#display {
+    .pinyin::before { content: "拼"; }
+}
+
+#center {
+    display: flex;
+    align-items: baseline;
+
+    #count {
+        position: relative;
+        width: 0;
+        right: calc(1rem + var(--border-size));
+        direction: rtl;
+        color: var(--red);
+    }
+}
+
+*:has(> #totop) {
+    position: relative;
+}
+#totop {
+    opacity: 0;
+    transition: opacity .3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 3rem;
+    width: 3rem;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+/* #characters {
+    display: grid;
+    grid-template-columns: repeat(10, 3rem);
+    max-height: 30rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        height: 3rem;
+
+        &:hover:not(.locked) { 
+            cursor: pointer;
+            border: var(--border);
+        }
+        &.locked { border: var(--bold-border); }
+    }
+} */
+
+#characters {
+    max-height: 30rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+/* content:has(#grid:checked) #fullspace { height: 2100rem; }
+content:has(#list:checked) #fullspace { height: 14000rem; } */
+
+content:has(#grid:checked) #midspace {
+    display: grid;
+    grid-template-columns: repeat(10, 3rem);
+
+    /* max-height: 30rem;
+    overflow-y: scroll; */
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+
+        height: 3rem;
+
+        &:hover:not(.locked) { 
+            cursor: pointer;
+            border: var(--border);
+        }
+        &.locked { border: var(--bold-border); }
+    }
+
+    span:not(:first-child) {
+        display: none;
+    }
+}
+
+content:has(#list:checked) #midspace {
+    display: grid;
+    grid-template-columns: 3rem 5rem 22rem;
+
+    /* max-height: 30rem;
+    overflow-y: scroll;
+    scrollbar-width: none; */
+
+    > div {
+        grid-column: span 3;
+
+        height: 2rem;
+        line-height: 2rem;
+
+        display: grid;
+        grid-template-columns: subgrid;
+
+        &:not(:last-child, :has(+.locked, +:hover))  {
+            box-shadow: 0px 1px var(--grey);
+        }
+
+        &:hover:not(.locked) { 
+            cursor: pointer;
+            box-shadow: inset 0px 0px 0px var(--border-size) var(--red);
+        }
+        &.locked {
+            box-shadow: inset 0px 0px 0px var(--bold-border-size) var(--red);
+        }
+    }
+
+    span {
+        text-indent: 1rem;
+        /* &:last-child {
+            letter-spacing: 1rem;
+        } */
+    }
+}
+
+
+/* content:has(#grid:checked) #midspace { height: 90rem; }
+content:has(#list:checked) #midspace { height: 70rem; } */

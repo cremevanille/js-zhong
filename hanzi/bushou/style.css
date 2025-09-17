@@ -1,25 +1,134 @@
-#category {
-    position: absolute;
-    left: 0;
-
+content {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
 
-    div {
-        display: grid;
-        place-items: center;
+    &:has(#var0:checked) #characters :not(.var0),
+    &:has(#var1:checked) #characters :not(.var1),
+    &:has(#var2:checked) #characters :not(.var2),
+    &:has(#var3:checked) #characters :not(.var3) {
+        font-weight: var(--light);
+        color: var(--grey);
+    }
+}
 
-        height: 3em;
-        width: 3em;
+#display {
+    .character span { display: none; }
+    &:has(#var0:checked) .character .var0,
+    &:has(#var1:checked) .character .var1,
+    &:has(#var2:checked) .character .var2,
+    &:has(#var3:checked) .character .var3 {
+        display: block;
+    }
+    .variants {
+        &::before { content: "异"; }
 
-        &#bushou {
-            background-color: var(--red);
-            color: var(--white);
+        height: 1.5rem;
+        line-height: 1.5rem;
+
+        label {
+            margin-right: .5rem;
+
+            &:hover:not(:has(input:checked)) {
+                cursor: pointer;
+            }
+            &:has(input:checked) {
+                border-bottom: var(--border);
+            }
+            input { display: none; }
+        }
+
+        .none {
+            font-weight: var(--light);
+            color: var(--grey);
         }
     }
 }
 
-content {
+#characters,
+content:has(#grid:checked) #radicals {
     display: grid;
-    place-items: center;
+    grid-template-columns: repeat(8, 3rem);
+
+    max-height: 30rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+content:has(#grid:checked) #radicals {
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+
+        height: 3rem;
+
+        &:hover:not(.locked) { 
+            cursor: pointer;
+            border: var(--border);
+            /* box-shadow: inset 0px 0px 0px var(--border-size) var(--red); */
+        }
+        &.locked {
+            border: var(--bold-border);
+            /* box-shadow: inset 0px 0px 0px var(--bold-border-size) var(--red); */
+        }
+    }
+
+    span:not(:first-child) {
+        display: none;
+    }
+}
+
+content:has(#list:checked) #radicals {
+    display: grid;
+    grid-template-columns: 3rem 5rem 9rem 7rem;
+
+    max-height: 30rem;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    > div {
+        grid-column: span 4;
+
+        height: 2rem;
+        line-height: 2rem;
+
+        display: grid;
+        grid-template-columns: subgrid;
+
+        &:not(:last-child, :has(+.locked, +:hover))  {
+            box-shadow: 0px 1px var(--grey);
+        }
+
+        &:hover:not(.locked) { 
+            cursor: pointer;
+            box-shadow: inset 0px 0px 0px var(--border-size) var(--red);
+        }
+        &.locked {
+            box-shadow: inset 0px 0px 0px var(--bold-border-size) var(--red);
+        }
+    }
+
+    span {
+        text-indent: 1rem;
+        &:last-child {
+            letter-spacing: 1rem;
+        }
+    }
+}
+
+
+#characters a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+
+    height: 3rem;
+
+    &:hover:not(.locked) { 
+        cursor: pointer;
+        border: var(--border);
+    }
+    &.locked { border: var(--bold-border); }
 }
